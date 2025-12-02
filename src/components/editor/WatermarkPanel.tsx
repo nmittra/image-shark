@@ -104,13 +104,12 @@ export function WatermarkPanel({ image, setEditedImage }: WatermarkPanelProps) {
       setEditedImage(result)
 
       if (shouldNavigate) {
-        // Store image data in localStorage
-        const imageData = result.split(',')[1]
-        localStorage.setItem('watermarkedImage', imageData)
-        localStorage.setItem('fileName', image.file.name)
-        
         // Navigate to download page
-        navigate('/download')
+        const searchParams = new URLSearchParams({
+          image: result,
+          fileName: image.file.name
+        })
+        navigate(`/download?${searchParams.toString()}`)
         toast({
           title: 'Watermark applied',
           status: 'success',

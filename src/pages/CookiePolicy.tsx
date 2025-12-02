@@ -1,6 +1,5 @@
-import { Box, Container, Heading, Text, VStack, useColorModeValue, Link as ChakraLink } from '@chakra-ui/react'
+import { Box, Container, Heading, Text, VStack, useColorModeValue } from '@chakra-ui/react'
 import { Header } from '../components/Header'
-import { Link } from 'react-router-dom'
 
 export function CookiePolicy() {
   const bg = useColorModeValue('gray.50', 'gray.800')
@@ -91,17 +90,14 @@ export function CookiePolicy() {
                 Contact Us
               </Heading>
               <Text color={textColor}>
-                If you have any questions about our Cookie Policy, please{' '}
-                <ChakraLink as={Link} to="/contact" color="blue.500" textDecoration="underline">
-                  contact us
-                </ChakraLink>.
+                If you have any questions about our Cookie Policy, please contact us at nmittra@gmail.com.
               </Text>
             </Box>
           </VStack>
         </VStack>
       </Container>
+
     </Box>
   )
 }
-
-export default CookiePolicy;
+export default CookiePolicy

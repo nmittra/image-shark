@@ -8,8 +8,8 @@ import { RouteErrorBoundary } from '../components/RouteErrorBoundary';
 // Import components with default exports using React.lazy
 const { default: LandingPage } = lazyImport(() => import('../components/LandingPage'), 'default');
 
-// Import components with named exports using lazyImport
-const { CompressPage } = lazyImport(() => import('../pages/CompressPage'), 'CompressPage');
+// Import components with default exports using React.lazy
+const { default: CompressPage } = lazyImport(() => import('../pages/CompressPage'), 'default');
 const { ResizePage } = lazyImport(() => import('../pages/ResizePage'), 'ResizePage');
 const { WatermarkPage } = lazyImport(() => import('../pages/WatermarkPage'), 'WatermarkPage');
 const { default: EditorPage } = lazyImport(() => import('../pages/EditorPage'), 'default');

@@ -1,7 +1,7 @@
-import { Box, Container, Heading, Text, VStack, useColorModeValue, Link as ChakraLink } from '@chakra-ui/react'
+import { Box, Container, Heading, Text, VStack, useColorModeValue } from '@chakra-ui/react'
 import { Header } from '../components/Header'
-import { Link } from 'react-router-dom'
 
+// Change from export function PrivacyPolicy() to:
 const PrivacyPolicy = () => {
   const bg = useColorModeValue('gray.50', 'gray.800')
   const textColor = useColorModeValue('gray.600', 'gray.300')
@@ -25,7 +25,7 @@ const PrivacyPolicy = () => {
                 Introduction
               </Heading>
               <Text color={textColor}>
-                Welcome to Image Shark. We respect your privacy and are committed to protecting your personal data. This privacy policy will inform you about how we look after your personal data when you visit our website and tell you about your privacy rights and how the law protects you.
+                Welcome to Image Editor. We respect your privacy and are committed to protecting your personal data. This privacy policy will inform you about how we look after your personal data when you visit our website and tell you about your privacy rights and how the law protects you.
               </Text>
             </Box>
 
@@ -90,15 +90,13 @@ const PrivacyPolicy = () => {
                 Contact Us
               </Heading>
               <Text color={textColor}>
-                If you have any questions about this privacy policy or our privacy practices, please{' '}
-                <ChakraLink as={Link} to="/contact" color="blue.500" textDecoration="underline">
-                  contact us
-                </ChakraLink>.
+                If you have any questions about this privacy policy or our privacy practices, please contact us at nmittra@gmail.com.
               </Text>
             </Box>
           </VStack>
         </VStack>
       </Container>
+
     </Box>
   )
 }

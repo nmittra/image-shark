@@ -86,19 +86,19 @@ export function LandingPage() {
       icon: FiCrop,
       title: 'Crop IMAGE',
       description: 'Crop your images to the perfect size and aspect ratio. Remove unwanted areas with precision.',
-      to: '/editor?tab=crop',
+      to: '/editor/crop',
     },
     {
       icon: FiEdit,
       title: 'Convert Format',
       description: 'Convert your images between different formats including JPG, PNG, and WebP while maintaining quality.',
-      to: '/editor?tab=convert',
+      to: '/editor/convert',
     },
     {
       icon: FiEdit,
       title: 'Meme Generator',
       description: 'Create funny memes by adding custom text to your images. Perfect for social media sharing.',
-      to: '/editor?tab=meme',
+      to: '/editor/meme',
     }
   ]
 
@@ -196,5 +196,3 @@ export function LandingPage() {
     </Box>
   )
 }
-
-export default LandingPage;

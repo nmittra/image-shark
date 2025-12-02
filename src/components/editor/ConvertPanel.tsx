@@ -190,39 +190,22 @@ export function ConvertPanel({ image, setEditedImage }: ConvertPanelProps) {
       
       // Update the edited image
       setEditedImage(dataUrl);
+      // Store the converted image data in localStorage
+      const timestamp = Date.now()
+      localStorage.setItem(`converted_image_${timestamp}`, dataUrl)
       
-      // Generate a unique key for localStorage
-      const storageKey = `converted_image_${Date.now()}`;
-      try {
-        // Store the converted image data in localStorage
-        localStorage.setItem(storageKey, dataUrl);
-        
-        // Create URL parameters with only the storage key
-        const searchParams = new URLSearchParams({
-          imageKey: storageKey,
-          fileName: image.file.name,
-          tab: 'convert'
-        });
-        
-        // Navigate to download page
-        navigate(`/download?${searchParams.toString()}`);
-        
-        toast({
-          title: 'Image converted',
-          status: 'success',
-          duration: 2000,
-          isClosable: true
-        });
-      } catch (storageError) {
-        console.error('Error storing converted image:', storageError);
-        toast({
-          title: 'Error saving converted image',
-          description: 'The image was converted but could not be saved. Please try again with a smaller image.',
-          status: 'error',
-          duration: 4000,
-          isClosable: true
-        });
-      }
+      const searchParams = new URLSearchParams({
+        imageKey: `converted_image_${timestamp}`,
+        fileName: image.file.name,
+        tab: 'convert'
+      })
+      navigate(`/download?${searchParams.toString()}`)
+      toast({
+        title: 'Image converted',
+        status: 'success',
+        duration: 2000,
+        isClosable: true
+      })
     } catch (error) {
       console.error('Error converting image:', error);
       setError(error instanceof Error ? error.message : 'Unknown error occurred');

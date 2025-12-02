@@ -39,16 +39,7 @@ export function CropPanel({ image, setEditedImage }: CropPanelProps) {
 
   const handleCrop = useCallback(async () => {
       try {
-        if (!imgRef.current || !crop.width || !crop.height) {
-          toast({
-            title: 'Invalid crop selection',
-            description: 'Please select an area to crop',
-            status: 'warning',
-            duration: 2000,
-            isClosable: true
-          });
-          return;
-        }
+        if (!imgRef.current || !crop.width || !crop.height) return
     
         setCropping(true)
         const img = new Image()

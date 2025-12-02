@@ -16,12 +16,10 @@ export function ImageUploader({ setSelectedImage }: ImageUploaderProps) {
     acceptedFiles.forEach(file => {
       const reader = new FileReader()
       reader.onload = () => {
-        const imageData = {
+        setSelectedImage({
           file,
           preview: reader.result as string
-        }
-        console.log('Setting selectedImage:', imageData)
-        setSelectedImage(imageData)
+        })
       }
       reader.readAsDataURL(file)
       setFiles(prevFiles => [...prevFiles, { name: file.name, size: file.size }])

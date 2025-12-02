@@ -1,7 +1,6 @@
 import { Box, Container, Heading, VStack, useColorModeValue } from '@chakra-ui/react'
 import { ImageUploader } from '../components/ImageUploader'
 import { ImageEditor } from '../components/ImageEditor'
-import { AdContainer } from '../components/AdContainer'
 import { Header } from '../components/Header'
 
 interface ImageFile {
@@ -9,12 +8,12 @@ interface ImageFile {
   preview: string
 }
 
-import { useOutletContext } from 'react-router-dom'
+interface CropPageProps {
+  selectedImage: ImageFile | null
+  setSelectedImage: (image: ImageFile | null) => void
+}
 
-type ImageContext = [ImageFile | null, (image: ImageFile | null) => void]
-
-function CropPage() {
-  const [selectedImage, setSelectedImage] = useOutletContext<ImageContext>()
+function CropPage({ selectedImage, setSelectedImage }: CropPageProps) {
   const bg = useColorModeValue('gray.50', 'gray.800')
 
   return (
@@ -26,7 +25,6 @@ function CropPage() {
             <Heading as="h1" size="xl" textAlign="center" mb={4}>
               Crop Your Images
             </Heading>
-            <AdContainer id="crop-top-ad" type="leaderboard" />
             {!selectedImage ? (
               <ImageUploader setSelectedImage={setSelectedImage} />
             ) : (

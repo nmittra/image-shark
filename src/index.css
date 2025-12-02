@@ -46,36 +46,8 @@ button:hover {
   border-color: #646cff;
 }
 button:focus,
-button:focus-visible,
-a:focus,
-a:focus-visible,
-input:focus,
-input:focus-visible,
-textarea:focus,
-textarea:focus-visible,
-select:focus,
-select:focus-visible {
-  outline: 2px solid #3182CE;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.4);
-}
-
-/* Touch device optimizations */
-@media (hover: none) and (pointer: coarse) {
-  button,
-  a,
-  input[type='submit'],
-  input[type='button'] {
-    min-height: 44px;
-    min-width: 44px;
-    padding: 12px;
-  }
-
-  input,
-  select,
-  textarea {
-    font-size: 16px; /* Prevent zoom on focus in iOS */
-  }
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
 }
 
 @media (prefers-color-scheme: light) {

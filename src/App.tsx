@@ -4,9 +4,8 @@ import { Footer } from './components/Footer'
 import { LoadingIndicator } from './components/LoadingIndicator'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { SkipToContent } from './components/SkipToContent'
-import { AdContainer } from './components/AdContainer'
 import { useState, useEffect, useMemo } from 'react'
-import { useLocation, Outlet, useNavigation } from 'react-router-dom'
+import { useLocation, Outlet, useNavigation, OutletContext } from 'react-router-dom'
 
 interface ImageFile {
   file: File
@@ -52,16 +51,14 @@ function App() {
     <Box bg={bg} minH="100vh" display="flex" flexDirection="column">
       <SkipToContent />
       <Box as="main" id="main-content" flex="1" role="main">
-        <ScrollToTop />
-        <Box flex="1">
-          {isLoading && <LoadingIndicator />}
-          <ErrorBoundary>
-            <Outlet context={imageContext} />
-          </ErrorBoundary>
-          <Footer />
-          <CookieConsent />
-          <AdContainer id="mobile-anchor-ad" type="anchor" />
-        </Box>
+      <ScrollToTop />
+      <Box flex="1">
+        {isLoading && <LoadingIndicator />}
+        <ErrorBoundary>
+          <Outlet context={imageContext} />
+        </ErrorBoundary>
+        <Footer />
+        <CookieConsent />
       </Box>
     </Box>
   )

@@ -29,7 +29,6 @@ import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import imageCompression from 'browser-image-compression'
-import { Progress } from '@chakra-ui/react'
 
 interface CompressPanelProps {
   image: {
@@ -48,7 +47,6 @@ export function CompressPanel({ image, setEditedImage }: CompressPanelProps) {
   const [preserveExif, setPreserveExif] = useState(false)
   const [previewCompressed, setPreviewCompressed] = useState<string | null>(null)
   const [previewLoading, setPreviewLoading] = useState(false)
-  const [compressionProgress, setCompressionProgress] = useState(0)
   const [previewData, setPreviewData] = useState({
     originalSize: image.file.size,
     estimatedSize: 0,
@@ -109,16 +107,12 @@ export function CompressPanel({ image, setEditedImage }: CompressPanelProps) {
     let reader: FileReader | null = null
     try {
       setCompressing(true)
-      setCompressionProgress(0)
       const options = {
         maxSizeMB: 1,
         maxWidthOrHeight: Math.max(maxWidth, maxHeight),
         useWebWorker: true,
         initialQuality: quality / 100,
-        preserveExif: preserveExif,
-        onProgress: (progress: number) => {
-          setCompressionProgress(progress)
-        }
+        preserveExif: preserveExif
       }
 
       const compressedFile = await imageCompression(image.file, options)
@@ -312,20 +306,6 @@ export function CompressPanel({ image, setEditedImage }: CompressPanelProps) {
       >
         Preview Compression
       </Button>
-
-      {compressing && (
-        <Box mt={4}>
-          <Text mb={1} fontSize="sm">Compressing: {Math.round(compressionProgress)}%</Text>
-          <Progress 
-            value={compressionProgress} 
-            size="sm" 
-            colorScheme="blue" 
-            borderRadius="md" 
-            hasStripe 
-            isAnimated 
-          />
-        </Box>
-      )}
 
       {previewCompressed && (
         <Box mt={4} borderWidth={1} borderRadius="md" overflow="hidden">

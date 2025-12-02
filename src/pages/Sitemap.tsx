@@ -42,17 +42,17 @@ export function Sitemap() {
         },
         {
           title: 'Crop Image',
-          path: '/editor?tab=crop',
+          path: '/editor/crop',
           description: 'Crop your images to the perfect size and aspect ratio.'
         },
         {
           title: 'Convert Format',
-          path: '/editor?tab=convert',
+          path: '/editor/convert',
           description: 'Convert your images between different formats including JPG, PNG, and WebP.'
         },
         {
           title: 'Meme Generator',
-          path: '/editor?tab=meme',
+          path: '/editor/meme',
           description: 'Create funny memes by adding custom text to your images.'
         }
       ]

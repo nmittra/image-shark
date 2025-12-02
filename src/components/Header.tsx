@@ -1,5 +1,5 @@
-import {
-  Box, Container, HStack, Link as ChakraLink, useColorModeValue, IconButton, VStack, Collapse,
+import { 
+  Box, Container, HStack, Link as ChakraLink, useColorModeValue, IconButton, VStack, Collapse, 
   useDisclosure
 } from '@chakra-ui/react'
 import { Link, useLocation } from 'react-router-dom'
@@ -60,18 +60,7 @@ export function Header() {
   const { isOpen, onToggle } = useDisclosure()
   const location = useLocation()
 
-  // Define navigation items and their categories
-  const navCategories = useMemo(() => [
-    {
-      title: 'Image Editing',
-      items: ['/compress', '/resize', '/watermark', '/crop']
-    },
-    {
-      title: 'Format Tools',
-      items: ['/convert', '/meme', '/editor']
-    }
-  ], []);
-
+  // Define all navigation items in one place without parent-child relationships
   const navItems = useMemo(() => [
     { path: '/compress', label: 'Compress' },
     { path: '/resize', label: 'Resize' },
@@ -82,7 +71,6 @@ export function Header() {
     { path: '/editor', label: 'Editor' }
   ], []);
 
-
   const isActive = useMemo(() => (path: string) => {
     if (path === '/') return location.pathname === '/'
     return location.pathname.startsWith(path)
@@ -90,18 +78,18 @@ export function Header() {
 
   // Skip to content link for accessibility
   const SkipLink = () => (
-    <ChakraLink
-      href="#main-content"
-      position="absolute"
-      left="-9999px"
-      top="auto"
-      width="1px"
-      height="1px"
+    <ChakraLink 
+      href="#main-content" 
+      position="absolute" 
+      left="-9999px" 
+      top="auto" 
+      width="1px" 
+      height="1px" 
       overflow="hidden"
-      _focus={{
-        left: "50%",
+      _focus={{ 
+        left: "50%", 
         transform: "translateX(-50%)",
-        width: "auto",
+        width: "auto", 
         height: "auto",
         backgroundColor: "blue.100",
         padding: "1rem",
@@ -131,54 +119,22 @@ export function Header() {
             to="/"
             display="flex"
             alignItems="center"
-            gap={3}
             _hover={{ textDecoration: 'none' }}
-            aria-label="Home - Image Shark"
+            aria-label="Home"
           >
-            <Logo boxSize="120px" />
-            <Box
-              fontSize={{ base: '2xl', md: '3xl' }}
-              fontWeight="900"
-              fontFamily="'Righteous', 'Bangers', 'Impact', cursive"
-              bgGradient="linear(to-r, blue.400, cyan.400, teal.500)"
-              bgClip="text"
-              letterSpacing="tight"
-              display={{ base: 'none', sm: 'block' }}
-            >
-              Image Shark
-            </Box>
+            <Logo boxSize="40px" />
           </ChakraLink>
 
           {/* Desktop Navigation */}
           <HStack spacing={6} flex={1} justify="center" display={{ base: 'none', md: 'flex' }}>
-            {navItems.map((item) => {
-              const category = navCategories.find(cat => cat.items.includes(item.path));
-              const isFirstInCategory = category &&
-                navItems.findIndex(ni => category.items.includes(ni.path)) ===
-                navItems.findIndex(ni => ni.path === item.path);
-
-              return (
-                <Box key={item.path} position="relative">
-                  {isFirstInCategory && (
-                    <Box
-                      position="absolute"
-                      top="-15px"
-                      left="0"
-                      fontSize="xs"
-                      color="gray.500"
-                      display={{ base: 'none', lg: 'block' }}
-                    >
-                      {category.title}
-                    </Box>
-                  )}
-                  <NavLink
-                    {...item}
-                    isActive={isActive(item.path)}
-                    activeColor={activeColor}
-                  />
-                </Box>
-              );
-            })}
+            {navItems.map((item) => (
+              <NavLink
+                key={item.path}
+                {...item}
+                isActive={isActive(item.path)}
+                activeColor={activeColor}
+              />
+            ))}
           </HStack>
 
           {/* Mobile Navigation Toggle */}

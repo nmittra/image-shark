@@ -2,31 +2,29 @@ import { StrictMode, lazy, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ChakraProvider, extendTheme, ColorModeScript } from '@chakra-ui/react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { HelmetProvider } from 'react-helmet-async'
 import './index.css'
 import App from './App'
 import { LoadingIndicator } from './components/LoadingIndicator'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { RouteErrorBoundary } from './components/RouteErrorBoundary'
 
-const routes = {
-  landing: lazy(() => import('./components/LandingPage')),
-  compress: lazy(() => import('./pages/CompressPage')),
-  resize: lazy(() => import('./pages/ResizePage')),
-  watermark: lazy(() => import('./pages/WatermarkPage')),
-  editor: lazy(() => import('./pages/EditorPage')),
-  crop: lazy(() => import('./pages/CropPage')),
-  convert: lazy(() => import('./pages/ConvertPage')),
-  meme: lazy(() => import('./pages/MemePage')),
-  privacy: lazy(() => import('./pages/PrivacyPolicy')),
-  terms: lazy(() => import('./pages/TermsOfService')),
-  cookie: lazy(() => import('./pages/CookiePolicy')),
-  copyright: lazy(() => import('./pages/Copyright')),
-  contact: lazy(() => import('./pages/Contact')),
-  sitemap: lazy(() => import('./pages/Sitemap')),
-  notFound: lazy(() => import('./pages/NotFound')),
-  download: lazy(() => import('./pages/DownloadPage'))
-};
+// Lazy load components
+const LandingPage = lazy(() => import('./components/LandingPage'))
+const CompressPage = lazy(() => import('./pages/CompressPage'))
+const ResizePage = lazy(() => import('./pages/ResizePage'))
+const WatermarkPage = lazy(() => import('./pages/WatermarkPage'))
+const EditorPage = lazy(() => import('./pages/EditorPage'))
+const CropPage = lazy(() => import('./pages/CropPage'))
+const ConvertPage = lazy(() => import('./pages/ConvertPage'))
+const MemePage = lazy(() => import('./pages/MemePage'))
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
+const TermsOfService = lazy(() => import('./pages/TermsOfService'))
+const CookiePolicy = lazy(() => import('./pages/CookiePolicy'))
+const Copyright = lazy(() => import('./pages/Copyright'))
+const Contact = lazy(() => import('./pages/Contact'))
+const Sitemap = lazy(() => import('./pages/Sitemap'))
+const NotFound = lazy(() => import('./pages/NotFound'))
+const DownloadPage = lazy(() => import('./pages/DownloadPage'))
 
 const theme = extendTheme({
   config: {
@@ -41,136 +39,72 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <RouteErrorBoundary />,
     children: [
-      {
-        index: true,
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.landing />
-          </Suspense>
-        ),
+      { 
+        path: '/', 
+        element: <Suspense fallback={<LoadingIndicator />}><LandingPage /></Suspense>
       },
-      {
-        path: 'compress',
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.compress />
-          </Suspense>
-        ),
+      { 
+        path: 'compress', 
+        element: <Suspense fallback={<LoadingIndicator />}><CompressPage /></Suspense>
       },
-      {
-        path: 'resize',
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.resize />
-          </Suspense>
-        ),
+      { 
+        path: 'resize', 
+        element: <Suspense fallback={<LoadingIndicator />}><ResizePage /></Suspense>
       },
-      {
-        path: 'watermark',
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.watermark />
-          </Suspense>
-        ),
+      { 
+        path: 'watermark', 
+        element: <Suspense fallback={<LoadingIndicator />}><WatermarkPage /></Suspense>
       },
-      {
-        path: 'crop',
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.crop />
-          </Suspense>
-        ),
+      { 
+        path: 'crop', 
+        element: <Suspense fallback={<LoadingIndicator />}><CropPage /></Suspense>
       },
-      {
-        path: 'convert',
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.convert />
-          </Suspense>
-        ),
+      { 
+        path: 'convert', 
+        element: <Suspense fallback={<LoadingIndicator />}><ConvertPage /></Suspense>
       },
-      {
-        path: 'meme',
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.meme />
-          </Suspense>
-        ),
+      { 
+        path: 'meme', 
+        element: <Suspense fallback={<LoadingIndicator />}><MemePage /></Suspense>
       },
-      {
-        path: 'editor',
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.editor />
-          </Suspense>
-        ),
+      { 
+        path: 'editor', 
+        element: <Suspense fallback={<LoadingIndicator />}><EditorPage /></Suspense>
       },
-      {
-        path: 'privacy-policy',
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.privacy />
-          </Suspense>
-        ),
+      { 
+        path: 'privacy-policy', 
+        element: <Suspense fallback={<LoadingIndicator />}><PrivacyPolicy /></Suspense>
       },
-      {
-        path: 'terms-of-service',
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.terms />
-          </Suspense>
-        ),
+      { 
+        path: 'terms-of-service', 
+        element: <Suspense fallback={<LoadingIndicator />}><TermsOfService /></Suspense>
       },
-      {
-        path: 'cookie-policy',
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.cookie />
-          </Suspense>
-        ),
+      { 
+        path: 'cookie-policy', 
+        element: <Suspense fallback={<LoadingIndicator />}><CookiePolicy /></Suspense>
       },
-      {
-        path: 'copyright',
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.copyright />
-          </Suspense>
-        ),
+      { 
+        path: 'copyright', 
+        element: <Suspense fallback={<LoadingIndicator />}><Copyright /></Suspense>
       },
-      {
-        path: 'contact',
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.contact />
-          </Suspense>
-        ),
+      { 
+        path: 'contact', 
+        element: <Suspense fallback={<LoadingIndicator />}><Contact /></Suspense>
       },
-      {
-        path: 'sitemap',
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.sitemap />
-          </Suspense>
-        ),
+      { 
+        path: 'sitemap', 
+        element: <Suspense fallback={<LoadingIndicator />}><Sitemap /></Suspense>
       },
-      {
-        path: 'download',
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.download />
-          </Suspense>
-        ),
+      { 
+        path: 'download', 
+        element: <Suspense fallback={<LoadingIndicator />}><DownloadPage /></Suspense>
       },
       {
         path: '*',
-        element: (
-          <Suspense fallback={<LoadingIndicator />}>
-            <routes.notFound />
-          </Suspense>
-        ),
-      },
-    ],
-  },
+        element: <NotFound />
+      }
+    ]
+  }
 ])
 
 const container = document.getElementById('root') as HTMLElement
@@ -180,11 +114,11 @@ root.render(
   <StrictMode>
     <ChakraProvider theme={theme}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <HelmetProvider>
-        <ErrorBoundary>
+      <ErrorBoundary>
+        <Suspense fallback={<LoadingIndicator />}>
           <RouterProvider router={router} />
-        </ErrorBoundary>
-      </HelmetProvider>
+        </Suspense>
+      </ErrorBoundary>
     </ChakraProvider>
   </StrictMode>
 )

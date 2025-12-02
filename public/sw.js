@@ -55,17 +55,12 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Skip non-HTTP(S) requests
-  if (!event.request.url.startsWith('http')) {
+  // Skip non-HTTP(S) requests and chrome-extension requests
+  if (!event.request.url.startsWith('http') || event.request.url.startsWith('chrome-extension://')) {
     return;
   }
 
-  // Skip chrome-extension requests
-  if (event.request.url.startsWith('chrome-extension://')) {
-    return;
-  }
-
-  // Skip module script requests to avoid MIME type issues
+  // Skip requests for module scripts to avoid MIME type issues
   if (event.request.destination === 'script' && event.request.mode === 'module') {
     return;
   }
@@ -76,42 +71,33 @@ self.addEventListener('fetch', (event) => {
         if (response) {
           return response;
         }
-
         return fetch(event.request).then((response) => {
-          // Don't cache failed responses
-          if (!response || response.status !== 200) {
-            return response;
-          }
-
-          // Don't cache chrome-extension URLs
-          if (response.url.startsWith('chrome-extension://')) {
+          // Only cache successful responses from our own origin
+          if (!response || response.status !== 200 || 
+              (response.type !== 'basic' && response.type !== 'cors')) {
             return response;
           }
 
           // Clone the response before caching
           const responseToCache = response.clone();
-
-          // Only cache same-origin requests or CORS-enabled resources
-          if (response.type === 'basic' || response.type === 'cors') {
-            caches.open(CACHE_NAME)
-              .then((cache) => {
-                cache.put(event.request, responseToCache);
-              })
-              .catch(() => {
-                // Silently handle caching errors
-                console.warn('Failed to cache:', event.request.url);
-              });
-          }
-
+          caches.open(CACHE_NAME)
+            .then((cache) => {
+              // Only cache same-origin requests or CORS-enabled resources
+              if (response.type === 'basic' || response.type === 'cors') {
+                return cache.put(event.request, responseToCache);
+              }
+              return Promise.resolve();
+            })
+            .catch(err => {
+              console.warn('Cache put failed:', err);
+              return Promise.resolve(); // Continue even if caching fails
+            });
           return response;
         });
       })
-      .catch(() => {
-        // Return a custom offline response
-        return new Response('Network error', { 
-          status: 503, 
-          statusText: 'Service Unavailable' 
-        });
+      .catch(error => {
+        console.error('Fetch failed:', error);
+        return new Response('Network error', { status: 503, statusText: 'Service Unavailable' });
       })
   );
 });

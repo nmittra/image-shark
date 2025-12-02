@@ -4,14 +4,16 @@ import {
   FormControl,
   FormLabel,
   Input,
+  HStack,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  ColorPicker,
   useToast
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 interface MemePanelProps {
   image: {
@@ -34,16 +36,7 @@ export function MemePanel({ image, setEditedImage }: MemePanelProps) {
       setGenerating(true)
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')
-      if (!ctx) {
-        toast({
-          title: 'Error generating meme',
-          description: 'Could not initialize image editor',
-          status: 'error',
-          duration: 2000,
-          isClosable: true
-        })
-        return
-      }
+      if (!ctx) return
 
       const img = new Image()
       img.onload = () => {

@@ -41,39 +41,21 @@ export function ResizePanel({ image, setEditedImage }: ResizePanelProps) {
 
   const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newWidth = e.target.value
-    const numWidth = Number(newWidth)
-
-    if (numWidth <= 0 || numWidth > 10000) {
-      return
-    }
-
     setWidth(newWidth)
 
     if (maintainAspectRatio && originalDimensions) {
       const ratio = originalDimensions.height / originalDimensions.width
-      const newHeight = Math.round(numWidth * ratio)
-      if (newHeight <= 10000) {
-        setHeight(String(newHeight))
-      }
+      setHeight(String(Math.round(Number(newWidth) * ratio)))
     }
   }
 
   const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newHeight = e.target.value
-    const numHeight = Number(newHeight)
-
-    if (numHeight <= 0 || numHeight > 10000) {
-      return
-    }
-
     setHeight(newHeight)
 
     if (maintainAspectRatio && originalDimensions) {
       const ratio = originalDimensions.width / originalDimensions.height
-      const newWidth = Math.round(numHeight * ratio)
-      if (newWidth <= 10000) {
-        setWidth(String(newWidth))
-      }
+      setWidth(String(Math.round(Number(newHeight) * ratio)))
     }
   }
 

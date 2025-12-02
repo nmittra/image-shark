@@ -24,8 +24,6 @@ export function LoadingIndicator() {
         emptyColor="gray.200"
         color={spinnerColor}
         size="xl"
-        role="progressbar"
-        aria-label="Loading content"
       />
     </Box>
   )
