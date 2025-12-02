@@ -14,7 +14,7 @@ import { FiDownload, FiEdit, FiRefreshCw } from 'react-icons/fi'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Header } from '../components/Header'
 
-export function DownloadPage() {
+export default function DownloadPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const editedImage = searchParams.get('image')

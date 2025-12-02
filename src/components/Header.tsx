@@ -1,11 +1,11 @@
-import { 
-  Box, Container, HStack, Link as ChakraLink, useColorModeValue, IconButton, VStack, Collapse, 
-  useDisclosure, Menu, MenuButton, MenuList, MenuItem, Button, useBreakpointValue, Text
+import {
+  Box, Container, HStack, Link as ChakraLink, useColorModeValue, IconButton, VStack, Collapse,
+  useDisclosure
 } from '@chakra-ui/react'
 import { Link, useLocation } from 'react-router-dom'
 import { Logo } from './Logo'
-import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons'
-import { useMemo, useState, useEffect } from 'react'
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
+import { useMemo } from 'react'
 
 interface NavItem {
   path: string
@@ -53,15 +53,22 @@ const NavLink = ({ path, label, isActive, activeColor, hoverBg, isMobile = false
 )
 
 export function Header() {
-  // Define navigation items and their categories first
+  const bg = useColorModeValue('white', 'gray.800')
+  const borderColor = useColorModeValue('gray.200', 'gray.600')
+  const activeColor = useColorModeValue('blue.500', 'blue.300')
+  const hoverBg = useColorModeValue('gray.50', 'gray.700')
+  const { isOpen, onToggle } = useDisclosure()
+  const location = useLocation()
+
+  // Define navigation items and their categories
   const navCategories = useMemo(() => [
-    { 
+    {
       title: 'Image Editing',
       items: ['/compress', '/resize', '/watermark', '/crop']
     },
-    { 
+    {
       title: 'Format Tools',
-      items: ['/convert', '/meme', '/editor'] 
+      items: ['/convert', '/meme', '/editor']
     }
   ], []);
 
@@ -75,68 +82,26 @@ export function Header() {
     { path: '/editor', label: 'Editor' }
   ], []);
 
-  const bg = useColorModeValue('white', 'gray.800')
-  const borderColor = useColorModeValue('gray.200', 'gray.600')
-  const activeColor = useColorModeValue('blue.500', 'blue.300')
-  const hoverBg = useColorModeValue('gray.50', 'gray.700')
-  const { isOpen, onToggle } = useDisclosure()
-  const location = useLocation()
-  const isMediumScreen = useBreakpointValue({ base: false, md: true, lg: false })
-
-  // Track recently used tools
-  const [recentTools, setRecentTools] = useState<string[]>(() => {
-    const saved = localStorage.getItem('recentTools');
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  // Update when navigating to a tool
-  useEffect(() => {
-    const currentPath = location.pathname;
-    if (navItems.some(item => item.path === currentPath)) {
-      const saved = localStorage.getItem('recentTools');
-      const currentRecent = saved ? JSON.parse(saved) : [];
-      
-      const newRecent = [
-        currentPath,
-        ...currentRecent.filter(path => path !== currentPath)
-      ].slice(0, 3); // Keep only 3 most recent
-      
-      setRecentTools(newRecent);
-      localStorage.setItem('recentTools', JSON.stringify(newRecent));
-    }
-  }, [location.pathname, navItems]);
-
-
 
   const isActive = useMemo(() => (path: string) => {
-    // Check for exact match first
-    if (path === location.pathname) return true;
-    
-    // Handle special cases - ensure we don't match partial paths incorrectly
-    // e.g. '/crop' should not match '/crop-advanced'
-    const pathParts = path.split('/').filter(Boolean);
-    const locationParts = location.pathname.split('/').filter(Boolean);
-    
-    if (pathParts.length === 0) return locationParts.length === 0;
-    
-    // Check if exact path segment matches, not just prefix
-    return locationParts[0] === pathParts[0];
+    if (path === '/') return location.pathname === '/'
+    return location.pathname.startsWith(path)
   }, [location.pathname]);
 
   // Skip to content link for accessibility
   const SkipLink = () => (
-    <ChakraLink 
-      href="#main-content" 
-      position="absolute" 
-      left="-9999px" 
-      top="auto" 
-      width="1px" 
-      height="1px" 
+    <ChakraLink
+      href="#main-content"
+      position="absolute"
+      left="-9999px"
+      top="auto"
+      width="1px"
+      height="1px"
       overflow="hidden"
-      _focus={{ 
-        left: "50%", 
+      _focus={{
+        left: "50%",
         transform: "translateX(-50%)",
-        width: "auto", 
+        width: "auto",
         height: "auto",
         backgroundColor: "blue.100",
         padding: "1rem",
@@ -166,35 +131,54 @@ export function Header() {
             to="/"
             display="flex"
             alignItems="center"
+            gap={3}
             _hover={{ textDecoration: 'none' }}
-            aria-label="Home"
+            aria-label="Home - Image Shark"
           >
-            <Logo boxSize="40px" />
+            <Logo boxSize="120px" />
+            <Box
+              fontSize={{ base: '2xl', md: '3xl' }}
+              fontWeight="900"
+              fontFamily="'Righteous', 'Bangers', 'Impact', cursive"
+              bgGradient="linear(to-r, blue.400, cyan.400, teal.500)"
+              bgClip="text"
+              letterSpacing="tight"
+              display={{ base: 'none', sm: 'block' }}
+            >
+              Image Shark
+            </Box>
           </ChakraLink>
 
           {/* Desktop Navigation */}
-          <HStack spacing={4} display={{ base: 'none', md: 'flex' }}>
-            {navItems.map((item) => (
-              <ChakraLink
-                key={item.path}
-                as={Link}
-                to={item.path}
-                px={3}
-                py={2}
-                rounded="md"
-                fontSize="sm"
-                fontWeight="medium"
-                color={isActive(item.path) ? activeColor : 'inherit'}
-                bg={isActive(item.path) ? hoverBg : 'transparent'}
-                _hover={{
-                  textDecoration: 'none',
-                  bg: hoverBg,
-                }}
-                onClick={(e) => handleNavClick(item.path, e)}
-              >
-                {item.label}
-              </ChakraLink>
-            ))}
+          <HStack spacing={6} flex={1} justify="center" display={{ base: 'none', md: 'flex' }}>
+            {navItems.map((item) => {
+              const category = navCategories.find(cat => cat.items.includes(item.path));
+              const isFirstInCategory = category &&
+                navItems.findIndex(ni => category.items.includes(ni.path)) ===
+                navItems.findIndex(ni => ni.path === item.path);
+
+              return (
+                <Box key={item.path} position="relative">
+                  {isFirstInCategory && (
+                    <Box
+                      position="absolute"
+                      top="-15px"
+                      left="0"
+                      fontSize="xs"
+                      color="gray.500"
+                      display={{ base: 'none', lg: 'block' }}
+                    >
+                      {category.title}
+                    </Box>
+                  )}
+                  <NavLink
+                    {...item}
+                    isActive={isActive(item.path)}
+                    activeColor={activeColor}
+                  />
+                </Box>
+              );
+            })}
           </HStack>
 
           {/* Mobile Navigation Toggle */}
@@ -213,36 +197,22 @@ export function Header() {
             display={{ base: 'flex', md: 'none' }}
             mt={4}
             pb={4}
-            spacing={2}
+            spacing={4}
             align="stretch"
           >
             {navItems.map((item) => (
-              <ChakraLink
+              <NavLink
                 key={item.path}
-                as={Link}
-                to={item.path}
-                px={3}
-                py={2}
-                rounded="md"
-                fontSize="sm"
-                fontWeight="medium"
-                color={isActive(item.path) ? activeColor : 'inherit'}
-                bg={isActive(item.path) ? hoverBg : 'transparent'}
-                _hover={{
-                  textDecoration: 'none',
-                  bg: hoverBg,
-                }}
-                onClick={(e) => {
-                  handleNavClick(item.path, e)
-                  onToggle() // Close mobile menu after navigation
-                }}
-              >
-                {item.label}
-              </ChakraLink>
+                {...item}
+                isActive={isActive(item.path)}
+                activeColor={activeColor}
+                hoverBg={hoverBg}
+                isMobile
+              />
             ))}
           </VStack>
         </Collapse>
       </Container>
     </Box>
-  )
+  );
 }

@@ -11,7 +11,7 @@ interface SitemapSection {
   }>
 }
 
-function Sitemap() {
+export function Sitemap() {
   const bg = useColorModeValue('gray.50', 'gray.800')
   const cardBg = useColorModeValue('white', 'gray.700')
   const borderColor = useColorModeValue('gray.200', 'gray.600')

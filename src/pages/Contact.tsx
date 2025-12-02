@@ -37,7 +37,7 @@ export function Contact() {
 
       toast({
         title: 'Message sent!',
-        description: 'We\'ll get back to you as soon as possible.',
+        description: 'We\'ll get back to you as soon as possible at admin@image-shark.com.',
         status: 'success',
         duration: 5000,
         isClosable: true,
@@ -71,7 +71,7 @@ export function Contact() {
           </Heading>
 
           <Text color={textColor}>
-            Have a question or feedback? We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.
+            Have a question or feedback? We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible at admin@image-shark.com.
           </Text>
 
           <Box as="form" onSubmit={handleSubmit} width="100%">
@@ -129,7 +129,8 @@ export function Contact() {
           </Box>
         </VStack>
       </Container>
-
     </Box>
   )
 }
+
+export default Contact;

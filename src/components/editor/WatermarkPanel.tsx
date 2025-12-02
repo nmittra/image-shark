@@ -238,7 +238,7 @@ export function WatermarkPanel({ image, setEditedImage }: WatermarkPanelProps) {
         <Button
           colorScheme="gray"
           onClick={previewWatermark}
-          isDisabled={!text || fontSize < 12 || opacity < 0}
+          isDisabled={!text}
           flex={1}
         >
           Preview
@@ -246,7 +246,7 @@ export function WatermarkPanel({ image, setEditedImage }: WatermarkPanelProps) {
         <Button
           colorScheme="blue"
           onClick={applyWatermark}
-          isDisabled={!text || fontSize < 12 || opacity < 0}
+          isDisabled={!text}
           flex={1}
         >
           Apply Watermark

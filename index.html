@@ -1,134 +1,31 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="preload" href="/assets/index.css" as="style" />
-    <link rel="preload" href="/assets/index.js" as="script" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <style>
-      @font-face {
-        font-family: 'Inter';
-        font-style: normal;
-        font-weight: 400;
-        font-display: swap;
-        src: url(https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2) format('woff2');
-      }
-    </style>
-    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/logo.svg" />
-    <link rel="icon" type="image/svg+xml" sizes="32x32" href="/logo.svg" />
-    <link rel="icon" type="image/svg+xml" sizes="16x16" href="/logo.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="manifest" href="/manifest.json" />
-    <link rel="alternate" hreflang="x-default" href="https://image-shark.com" />
-    <link rel="alternate" hreflang="en" href="https://image-shark.com" />
-    <link rel="alternate" hreflang="en-US" href="https://image-shark.com" />
-    <link rel="alternate" hreflang="en-GB" href="https://image-shark.com/gb" />
-    <link rel="alternate" hreflang="es" href="https://image-shark.com/es" />
-    <link rel="alternate" hreflang="fr" href="https://image-shark.com/fr" />
-    <link rel="alternate" hreflang="de" href="https://image-shark.com/de" />
-    <link rel="alternate" hreflang="it" href="https://image-shark.com/it" />
-    <link rel="alternate" hreflang="pt" href="https://image-shark.com/pt" />
-    <link rel="alternate" hreflang="ja" href="https://image-shark.com/ja" />
-    <link rel="alternate" hreflang="zh" href="https://image-shark.com/zh" />
-    <meta name="theme-color" content="#3182CE" />
-    <title>Image Editor Online | Free Photo Editing Tools - image-shark</title>
-    <meta name="description" content="Transform your images with image-shark's free tools. Compress, resize, crop, add watermarks, and create memes. Fast, secure, and no registration required." />
-    <meta name="keywords" content="online image editor, photo editing tools, image compression, photo resizer, crop tool, watermark maker, meme generator, free image editor, picture editor online, image optimization, bulk image editing, professional photo editor" />
-    <meta name="author" content="image-shark" />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <meta name="googlebot" content="index, follow" />
-    <meta name="language" content="English" />
-    <meta name="revisit-after" content="7 days" />
-    <link rel="canonical" href="https://image-shark.com" />
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Image Editor Online | Free Photo Editing Tools - image-shark" />
-    <meta property="og:description" content="Free online image editing tool with advanced features. Compress, resize, crop images, add watermarks, and create memes. No registration required." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://image-shark.com" />
-    <meta property="og:image" content="https://image-shark.com/social-preview.png" loading="lazy" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:site_name" content="image-shark" />
-    <meta property="og:locale" content="en_US" />
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="image-shark - Free Online Image Editor | Crop, Compress & More" />
-    <meta name="twitter:description" content="Free online image editing tool with advanced features. Compress, resize, crop images, add watermarks, and create memes. No registration required." />
-    <meta name="twitter:image" content="https://image-shark.com/social-preview.png" loading="lazy" />
-    <!-- Schema.org Markup -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "image-shark",
-        "description": "Transform your images online with image-shark's free tools. Professional-grade editor for compression, resizing, cropping, watermarks, and meme creation.",
-        "url": "https://image-shark.com",
-        "applicationCategory": "Image Editor",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Works on all modern browsers",
-        "permissions": "image-upload",
-        "softwareVersion": "1.0",
-        "datePublished": "2024-01-01",
-        "author": {
-          "@type": "Organization",
-          "name": "image-shark",
-          "url": "https://image-shark.com"
-        },
-        "sameAs": [
-          "https://twitter.com/imageshark",
-          "https://facebook.com/imageshark",
-          "https://instagram.com/imageshark",
-          "https://linkedin.com/company/imageshark"
-        ],
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": {
-            "@type": "EntryPoint",
-            "urlTemplate": "https://image-shark.com/search?q={search_term_string}"
-          },
-          "query-input": "required name=search_term_string"
-        },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.8",
-          "ratingCount": "1250"
-        },
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "featureList": [
-          "Image Compression",
-          "Image Resizing",
-          "Image Cropping",
-          "Watermark Addition",
-          "Format Conversion",
-          "Meme Generation"
-        ]
-      }
-    </script>
-    <script id="chakra-script" defer>window.__CHAKRA_COLOR_MODE__ = localStorage.getItem('chakra-ui-color-mode') || 'light';</script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-              console.log('ServiceWorker registration successful');
-            })
-            .catch(err => {
-              console.log('ServiceWorker registration failed: ', err);
-            });
-        });
-      }
-    </script>
-    <script type="module" src="/assets/index.js"></script>
-    <script nomodule src="/assets/index.legacy.js"></script>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Shark - Free Online Image Editor</title>
+  <link rel="stylesheet" href="/index.css" crossorigin="anonymous" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Bangers&display=swap" rel="stylesheet" />
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  <script type="module" src="/src/main.tsx"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <!-- Google AdSense -->
+  <script data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" async defer
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</body>
+
 </html>

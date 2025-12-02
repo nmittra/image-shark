@@ -1,7 +1,5 @@
 import {
-  Box,
   Button,
-  ButtonGroup,
   FormControl,
   FormLabel,
   Select,
@@ -9,6 +7,7 @@ import {
   Text,
   useToast,
   HStack,
+  Box,
   Slider,
   SliderTrack,
   SliderFilledTrack,
@@ -38,9 +37,7 @@ const getFormatName = (mimeType: string): string => {
     'image/webp': 'WebP',
     'image/gif': 'GIF',
     'image/bmp': 'BMP',
-    'image/svg+xml': 'SVG',
-    'image/avif': 'AVIF',
-    'image/tiff': 'TIFF'
+    'image/svg+xml': 'SVG'
   };
   return formatMap[mimeType] || mimeType.split('/')[1]?.toUpperCase() || 'Unknown';
 };
@@ -57,32 +54,14 @@ const estimateFileSize = (
     'image/jpeg': {
       'image/png': 1.5,
       'image/webp': 0.7,
-      'image/avif': 0.5,
-      'image/tiff': 2.0
     },
     'image/png': {
       'image/jpeg': 0.7,
       'image/webp': 0.6,
-      'image/avif': 0.4,
-      'image/tiff': 1.8
     },
     'image/webp': {
       'image/jpeg': 1.2,
       'image/png': 1.7,
-      'image/avif': 0.8,
-      'image/tiff': 2.2
-    },
-    'image/avif': {
-      'image/jpeg': 1.8,
-      'image/png': 2.2,
-      'image/webp': 1.4,
-      'image/tiff': 2.5
-    },
-    'image/tiff': {
-      'image/jpeg': 0.5,
-      'image/png': 0.6,
-      'image/webp': 0.4,
-      'image/avif': 0.3
     }
   };
   
@@ -95,64 +74,28 @@ const estimateFileSize = (
   return Math.round(originalSize * factor * qualityFactor);
 };
 
-// Helper to get format compatibility information
-const getFormatCompatibility = (format: string): { browsers: string, notes: string } => {
-  switch (format) {
-    case 'image/webp':
-      return {
-        browsers: 'Chrome, Firefox, Edge, Safari 14+',
-        notes: 'Great balance of quality and compression. Not supported in older browsers.'
-      };
-    case 'image/avif':
-      return {
-        browsers: 'Chrome, Firefox 92+, Edge',
-        notes: 'Best compression but limited browser support.'
-      };
-    case 'image/jpeg':
-      return {
-        browsers: 'All browsers',
-        notes: 'Universal support but lossy compression.'
-      };
-    case 'image/png':
-      return {
-        browsers: 'All browsers',
-        notes: 'Lossless but larger file size.'
-      };
-    case 'image/tiff':
-      return {
-        browsers: 'Limited browser support',
-        notes: 'Typically requires download to view. Best for print/archival.'
-      };
-    default:
-      return { browsers: 'Varies', notes: '' };
-  }
-};
-
 export function ConvertPanel({ image, setEditedImage }: ConvertPanelProps) {
   // Extract current format from file
   const currentFormat = image.file.type || 'image/jpeg';
   const currentFormatName = getFormatName(currentFormat);
   
   // State management
-  const [preset, setPreset] = useState<string | null>(null);
   const [format, setFormat] = useState(currentFormat !== 'image/webp' ? 'image/webp' : 'image/jpeg');
   const [quality, setQuality] = useState(92);
   const [showTooltip, setShowTooltip] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [converting, setConverting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
-
+  
   const toast = useToast();
   const navigate = useNavigate();
   const textColor = useColorModeValue('gray.600', 'gray.300');
-
-  // Reset error and preview when format changes
+  
+  // Reset error when format changes
   useEffect(() => {
     setError(null);
-    setPreviewUrl(null);
   }, [format]);
-
+  
   // Estimated file size after conversion
   const estimatedSize = useMemo(() => {
     return estimateFileSize(
@@ -173,132 +116,50 @@ export function ConvertPanel({ image, setEditedImage }: ConvertPanelProps) {
     };
   }, [estimatedSize, image.file.size]);
   
-  // Memoized conversion function with chunked processing for large images
+  // Memoized conversion function
   const convertImage = useCallback(async () => {
     try {
       setConverting(true);
       setProgress(10);
       setError(null);
       
-      const MAX_DIMENSION = 4000; // Maximum dimension for processing
-      const CHUNK_SIZE = 1000; // Process in chunks for large images
-      
-      // Create canvas - fallback to regular canvas if OffscreenCanvas is not supported
-      const canvas = typeof OffscreenCanvas !== 'undefined' ? 
-        new OffscreenCanvas(1, 1) : 
-        document.createElement('canvas');
+      // Create canvas
+      const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       
       if (!ctx) {
         throw new Error('Could not initialize image editor');
       }
       
+      // Load image with progress tracking
       return new Promise<string>((resolve, reject) => {
         const img = new Image();
         
-        img.onerror = () => { 
-          reject(new Error('The image could not be loaded')); 
+        img.onerror = () => {
+          reject(new Error('The image could not be loaded'));
         };
         
-        img.onload = async () => {
+        img.onload = () => {
           try {
-            setProgress(30);
+            setProgress(50);
             
-            // Handle oversized images
-            let finalWidth = img.width;
-            let finalHeight = img.height;
+            // Set canvas dimensions
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
             
-            if (img.width > MAX_DIMENSION || img.height > MAX_DIMENSION) {
-              const scale = MAX_DIMENSION / Math.max(img.width, img.height);
-              finalWidth = Math.floor(img.width * scale);
-              finalHeight = Math.floor(img.height * scale);
+            setProgress(80);
+            
+            // Convert to selected format
+            const qualityValue = (format === 'image/jpeg' || format === 'image/webp') ? quality / 100 : undefined;
+            const dataUrl = canvas.toDataURL(format, qualityValue);
+            
+            if (!dataUrl || typeof dataUrl !== 'string') {
+              throw new Error('Invalid data URL generated');
             }
             
-            // Set canvas size
-            canvas.width = finalWidth;
-            canvas.height = finalHeight;
-            
-            // Process large images in chunks for better UI responsiveness
-            if (finalWidth * finalHeight > CHUNK_SIZE * CHUNK_SIZE) {
-              // Processing in chunks with requestAnimationFrame
-              const numChunks = Math.ceil((finalWidth * finalHeight) / (CHUNK_SIZE * CHUNK_SIZE));
-              const chunksPerRow = Math.ceil(finalWidth / CHUNK_SIZE);
-              
-              let processedChunks = 0;
-              
-              const processChunk = () => {
-                if (processedChunks >= numChunks) {
-                  finishConversion();
-                  return;
-                }
-                
-                const row = Math.floor(processedChunks / chunksPerRow);
-                const col = processedChunks % chunksPerRow;
-                
-                const x = col * CHUNK_SIZE;
-                const y = row * CHUNK_SIZE;
-                const w = Math.min(CHUNK_SIZE, finalWidth - x);
-                const h = Math.min(CHUNK_SIZE, finalHeight - y);
-                
-                ctx.drawImage(
-                  img,
-                  x * (img.width / finalWidth),
-                  y * (img.height / finalHeight),
-                  w * (img.width / finalWidth),
-                  h * (img.height / finalHeight),
-                  x, y, w, h
-                );
-                
-                processedChunks++;
-                setProgress(30 + Math.floor((processedChunks / numChunks) * 50));
-                
-                requestAnimationFrame(processChunk);
-              };
-              
-              processChunk();
-            } else {
-              // Process small images all at once
-              ctx.drawImage(img, 0, 0, finalWidth, finalHeight);
-              setProgress(80);
-              finishConversion();
-            }
-            
-            async function finishConversion() {
-              try {
-                let imageData;
-                
-                if ('convertToBlob' in canvas) {
-                  // Use blob for better memory management with large images
-                  const blob = await (canvas as OffscreenCanvas).convertToBlob({
-                    type: format,
-                    quality: (format === 'image/jpeg' || format === 'image/webp') ? quality / 100 : undefined
-                  });
-                  
-                  // Convert blob to data URL
-                  const reader = new FileReader();
-                  imageData = await new Promise<string>((resolve, reject) => {
-                    reader.onload = () => resolve(reader.result as string);
-                    reader.onerror = () => reject(new Error('Failed to generate image data'));
-                    reader.readAsDataURL(blob);
-                  });
-                } else {
-                  // Fallback for regular canvas
-                  imageData = (canvas as HTMLCanvasElement).toDataURL(
-                    format,
-                    (format === 'image/jpeg' || format === 'image/webp') ? quality / 100 : undefined
-                  );
-                }
-                
-                if (!imageData || typeof imageData !== 'string') {
-                  throw new Error('Invalid image data generated');
-                }
-                
-                setProgress(100);
-                resolve(imageData);
-              } catch (e) {
-                reject(e);
-              }
-            }
+            setProgress(100);
+            resolve(dataUrl);
           } catch (e) {
             reject(e instanceof Error ? e : new Error(String(e)));
           }
@@ -311,37 +172,6 @@ export function ConvertPanel({ image, setEditedImage }: ConvertPanelProps) {
     }
   }, [format, quality, image.preview]);
   
-  const handlePreview = async () => {
-    try {
-      setConverting(true);
-      setProgress(10);
-      setError(null);
-      
-      const dataUrl = await convertImage();
-      setPreviewUrl(dataUrl);
-      
-      toast({
-        title: 'Preview generated',
-        status: 'success',
-        duration: 2000,
-        isClosable: true
-      });
-    } catch (error) {
-      console.error('Error generating preview:', error);
-      setError(error instanceof Error ? error.message : 'Unknown error occurred');
-      toast({
-        title: 'Error generating preview',
-        description: error instanceof Error ? error.message : 'Failed to generate preview',
-        status: 'error',
-        duration: 4000,
-        isClosable: true
-      });
-    } finally {
-      setConverting(false);
-      setProgress(0);
-    }
-  };
-
   const handleConvert = async () => {
     try {
       // Skip conversion if format is the same and quality doesn't matter
@@ -427,45 +257,6 @@ export function ConvertPanel({ image, setEditedImage }: ConvertPanelProps) {
 
       {/* Format selection */}
       <FormControl isDisabled={converting}>
-        <FormLabel>Quick Presets</FormLabel>
-        <ButtonGroup isAttached variant="outline" size="sm" width="full">
-          <Button 
-            flex={1} 
-            onClick={() => {
-              setFormat('image/webp');
-              setQuality(75);
-              setPreset('web');
-            }}
-            colorScheme={preset === 'web' ? 'blue' : 'gray'}
-          >
-            Web Optimized
-          </Button>
-          <Button 
-            flex={1} 
-            onClick={() => {
-              setFormat('image/jpeg');
-              setQuality(92);
-              setPreset('photo');
-            }}
-            colorScheme={preset === 'photo' ? 'blue' : 'gray'}
-          >
-            Photo Quality
-          </Button>
-          <Button 
-            flex={1} 
-            onClick={() => {
-              setFormat('image/png');
-              setQuality(100);
-              setPreset('lossless');
-            }}
-            colorScheme={preset === 'lossless' ? 'blue' : 'gray'}
-          >
-            Lossless
-          </Button>
-        </ButtonGroup>
-      </FormControl>
-
-      <FormControl isDisabled={converting}>
         <FormLabel htmlFor="format-select">Convert to Format</FormLabel>
         <Select
           id="format-select"
@@ -475,8 +266,6 @@ export function ConvertPanel({ image, setEditedImage }: ConvertPanelProps) {
           <option value="image/jpeg">JPEG</option>
           <option value="image/png">PNG</option>
           <option value="image/webp">WebP</option>
-          <option value="image/avif">AVIF</option>
-          <option value="image/tiff">TIFF</option>
         </Select>
         <FormHelperText>
           Estimated size: {(estimatedSize / 1024).toFixed(1)} KB
@@ -486,10 +275,6 @@ export function ConvertPanel({ image, setEditedImage }: ConvertPanelProps) {
             </Text>
           )}
         </FormHelperText>
-        <Box mt={2} fontSize="xs" color={textColor}>
-          <Text fontWeight="medium">Compatibility: {getFormatCompatibility(format).browsers}</Text>
-          <Text>{getFormatCompatibility(format).notes}</Text>
-        </Box>
       </FormControl>
 
       {/* Quality slider (only for formats that support it) */}
@@ -544,44 +329,17 @@ export function ConvertPanel({ image, setEditedImage }: ConvertPanelProps) {
         />
       )}
 
-      {/* Convert and Preview buttons */}
-      <HStack>
-        <Button
-          colorScheme="gray"
-          onClick={handlePreview}
-          isLoading={converting && !previewUrl}
-          loadingText="Generating preview"
-          isDisabled={format === currentFormat && format !== 'image/jpeg' && format !== 'image/webp'}
-          flex={1}
-        >
-          Preview
-        </Button>
-        
-        <Button
-          colorScheme="blue"
-          onClick={handleConvert}
-          isLoading={converting && !previewUrl}
-          loadingText="Converting"
-          isDisabled={format === currentFormat && format !== 'image/jpeg' && format !== 'image/webp'}
-          flex={1}
-        >
-          Convert to {getFormatName(format)}
-        </Button>
-      </HStack>
-
-      {/* Preview display */}
-      {previewUrl && (
-        <Box mt={4} borderWidth={1} borderRadius="md" p={2}>
-          <Text fontSize="sm" fontWeight="medium" mb={2}>Preview:</Text>
-          <Box position="relative">
-            <Image src={previewUrl} maxH="300px" mx="auto" />
-            <Text position="absolute" bottom={0} right={0} fontSize="xs" p={1} bg="blackAlpha.700" color="white">
-              Estimated: {(estimatedSize / 1024).toFixed(1)} KB
-            </Text>
-          </Box>
-        </Box>
-      )}
-
+      {/* Convert button */}
+      <Button
+        colorScheme="blue"
+        onClick={handleConvert}
+        isLoading={converting}
+        loadingText="Converting"
+        isDisabled={format === currentFormat && (format !== 'image/jpeg' && format !== 'image/webp')}
+      >
+        Convert to {getFormatName(format)}
+      </Button>
+      
       {/* Format comparison info */}
       <HStack 
         spacing={4} 

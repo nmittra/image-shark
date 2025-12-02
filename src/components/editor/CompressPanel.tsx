@@ -105,38 +105,11 @@ export function CompressPanel({ image, setEditedImage }: CompressPanelProps) {
     }
   }
 
-  const checkImageDimensions = () => {
-    return new Promise<void>((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => {
-        // Check for extremely large dimensions
-        if (img.width * img.height > 25000000) { // 25 megapixels
-          toast({
-            title: "Large Image Detected",
-            description: `This image is ${img.width}x${img.height}px and may take longer to compress.`,
-            status: "warning",
-            duration: 5000,
-            isClosable: true
-          });
-        }
-        resolve();
-      };
-      img.onerror = () => {
-        reject(new Error("Failed to load image for dimension check"));
-      };
-      img.src = image.preview;
-    });
-  };
-
   const handleCompress = async () => {
     let reader: FileReader | null = null
     try {
       setCompressing(true)
       setCompressionProgress(0)
-  
-      // Check image dimensions first
-      await checkImageDimensions();
-  
       const options = {
         maxSizeMB: 1,
         maxWidthOrHeight: Math.max(maxWidth, maxHeight),
@@ -146,71 +119,56 @@ export function CompressPanel({ image, setEditedImage }: CompressPanelProps) {
         onProgress: (progress: number) => {
           setCompressionProgress(progress)
         }
-      };
-  
-      const compressedFile = await imageCompression(image.file, options);
-      reader = new FileReader();
-  
+      }
+
+      const compressedFile = await imageCompression(image.file, options)
+      reader = new FileReader()
+
       const result = await new Promise<string>((resolve, reject) => {
-        if (!reader) return reject(new Error('FileReader was cleaned up'));
-  
+        if (!reader) return reject(new Error('FileReader was cleaned up'))
+
         reader.onloadend = () => {
           if (reader && typeof reader.result === 'string') {
-            resolve(reader.result);
+            resolve(reader.result)
           } else {
-            reject(new Error('Failed to read compressed file'));
+            reject(new Error('Failed to read compressed file'))
           }
-        };
-  
+        }
+
         reader.onerror = () => {
-          reject(new Error('Error reading compressed file'));
-        };
-  
-        reader.readAsDataURL(compressedFile);
-      });
-  
-      setEditedImage(result);
-      // Store compressed image in localStorage with a unique key
-      const storageKey = `compressed_image_${Date.now()}`;
-      try {
-        localStorage.setItem(storageKey, result);
-        
-        // Use React Router for navigation with minimal URL parameters
-        const searchParams = new URLSearchParams({
-          imageKey: storageKey,
-          originalSize: String(image.file.size),
-          compressedSize: String(compressedFile.size),
-          fileName: image.file.name
-        });
-        navigate(`/download?${searchParams.toString()}`);
-      } catch (storageError) {
-        console.error('Error storing compressed image:', storageError);
-        toast({
-          title: 'Storage Error',
-          description: 'Could not save the compressed image. Try a smaller image or compress with a lower quality setting.',
-          status: 'error',
-          duration: 4000,
-          isClosable: true
-        });
-      }
+          reject(new Error('Error reading compressed file'))
+        }
+
+        reader.readAsDataURL(compressedFile)
+      })
+
+      setEditedImage(result)
+      // Use React Router for navigation to maintain the single-page application flow
+      const searchParams = new URLSearchParams({
+        image: result,
+        originalSize: String(image.file.size),
+        compressedSize: String(compressedFile.size),
+        fileName: image.file.name
+      })
+      navigate(`/download?${searchParams.toString()}`)
     } catch (error) {
-      console.error('Error compressing image:', error);
+      console.error('Error compressing image:', error)
       toast({
         title: 'Error compressing image',
-        description: error instanceof Error ? error.message : 'Please try again with a different quality setting',
+        description: 'Please try again with a different quality setting',
         status: 'error',
         duration: 3000,
         isClosable: true
-      });
+      })
     } finally {
       if (reader) {
-        reader.onloadend = null;
-        reader.onerror = null;
-        reader = null;
+        reader.onloadend = null
+        reader.onerror = null
+        reader = null
       }
-      setCompressing(false);
+      setCompressing(false)
     }
-  };
+  }
 
   return (
     <VStack spacing={6} align="stretch" p={4}>
