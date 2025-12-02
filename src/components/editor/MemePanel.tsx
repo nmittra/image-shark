@@ -34,7 +34,16 @@ export function MemePanel({ image, setEditedImage }: MemePanelProps) {
       setGenerating(true)
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')
-      if (!ctx) return
+      if (!ctx) {
+        toast({
+          title: 'Error generating meme',
+          description: 'Could not initialize image editor',
+          status: 'error',
+          duration: 2000,
+          isClosable: true
+        })
+        return
+      }
 
       const img = new Image()
       img.onload = () => {

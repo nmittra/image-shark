@@ -15,7 +15,9 @@ import {
   SliderFilledTrack,
   SliderThumb,
   Text,
+  useToast
 } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 import { useState, useCallback } from 'react'
 
 interface WatermarkPanelProps {
@@ -26,20 +28,51 @@ interface WatermarkPanelProps {
   setEditedImage: (preview: string) => void
 }
 
+// Helper function to convert hex to rgb
+function hexToRgb(hex: string) {
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  return `${r}, ${g}, ${b}`
+}
+
 export function WatermarkPanel({ image, setEditedImage }: WatermarkPanelProps) {
   const [text, setText] = useState('')
   const [fontSize, setFontSize] = useState(24)
   const [opacity, setOpacity] = useState(50)
   const [position, setPosition] = useState({ x: 50, y: 50 })
+  const [rotation, setRotation] = useState(0)
+  const [color, setColor] = useState('#ffffff')
+  const [fontFamily, setFontFamily] = useState('Arial')
+  const toast = useToast()
+  const navigate = useNavigate()
 
-  const applyWatermark = useCallback(() => {
+  const processWatermark = useCallback((shouldNavigate = false) => {
     if (!text) return
 
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
-    if (!ctx) return
+    if (!ctx) {
+      toast({
+        title: 'Error processing watermark',
+        description: 'Could not initialize image editor',
+        status: 'error',
+        duration: 2000,
+        isClosable: true
+      })
+      return
+    }
 
     const img = new Image()
+    img.onerror = () => {
+      toast({
+        title: 'Error loading image',
+        description: 'The image could not be loaded. Please try again or use a different image.',
+        status: 'error',
+        duration: 2000,
+        isClosable: true
+      })
+    }
     img.onload = () => {
       canvas.width = img.width
       canvas.height = img.height
@@ -48,8 +81,8 @@ export function WatermarkPanel({ image, setEditedImage }: WatermarkPanelProps) {
       ctx.drawImage(img, 0, 0)
 
       // Configure watermark text
-      ctx.fillStyle = `rgba(255, 255, 255, ${opacity / 100})`
-      ctx.font = `${fontSize}px Arial`
+      ctx.fillStyle = `rgba(${hexToRgb(color)}, ${opacity / 100})`
+      ctx.font = `${fontSize}px ${fontFamily}`
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
 
@@ -57,14 +90,45 @@ export function WatermarkPanel({ image, setEditedImage }: WatermarkPanelProps) {
       const x = (img.width * position.x) / 100
       const y = (img.height * position.y) / 100
 
-      // Draw watermark
-      ctx.fillText(text, x, y)
+      // Draw watermark with rotation
+      ctx.save()
+      ctx.translate(x, y)
+      ctx.rotate((rotation * Math.PI) / 180)
+      ctx.fillText(text, 0, 0)
+      ctx.restore()
+
+      // Get the watermarked image data
+      const result = canvas.toDataURL(image.file.type)
 
       // Update the image
-      setEditedImage(canvas.toDataURL(image.file.type))
+      setEditedImage(result)
+
+      if (shouldNavigate) {
+        // Store image data in localStorage
+        const imageData = result.split(',')[1]
+        localStorage.setItem('watermarkedImage', imageData)
+        localStorage.setItem('fileName', image.file.name)
+        
+        // Navigate to download page
+        navigate('/download')
+        toast({
+          title: 'Watermark applied',
+          status: 'success',
+          duration: 2000,
+          isClosable: true
+        })
+      }
     }
     img.src = image.preview
-  }, [text, fontSize, opacity, position, image, setEditedImage])
+  }, [text, fontSize, opacity, position, rotation, color, fontFamily, image, setEditedImage, toast, navigate])
+
+  const previewWatermark = useCallback(() => {
+    processWatermark(false)
+  }, [processWatermark])
+
+  const applyWatermark = useCallback(() => {
+    processWatermark(true)
+  }, [processWatermark])
 
   return (
     <VStack spacing={4} align="stretch">
@@ -145,13 +209,49 @@ export function WatermarkPanel({ image, setEditedImage }: WatermarkPanelProps) {
         </HStack>
       </FormControl>
 
-      <Button
-        colorScheme="blue"
-        onClick={applyWatermark}
-        isDisabled={!text}
-      >
-        Apply Watermark
-      </Button>
+      <FormControl>
+        <FormLabel>Rotation: {rotation}°</FormLabel>
+        <Slider
+          value={rotation}
+          onChange={setRotation}
+          min={0}
+          max={360}
+          step={1}
+        >
+          <SliderTrack>
+            <SliderFilledTrack />
+          </SliderTrack>
+          <SliderThumb />
+        </Slider>
+      </FormControl>
+
+      <FormControl>
+        <FormLabel>Color</FormLabel>
+        <Input
+          type="color"
+          value={color}
+          onChange={(e) => setColor(e.target.value)}
+        />
+      </FormControl>
+
+      <HStack spacing={4} w="full">
+        <Button
+          colorScheme="gray"
+          onClick={previewWatermark}
+          isDisabled={!text}
+          flex={1}
+        >
+          Preview
+        </Button>
+        <Button
+          colorScheme="blue"
+          onClick={applyWatermark}
+          isDisabled={!text}
+          flex={1}
+        >
+          Apply Watermark
+        </Button>
+      </HStack>
     </VStack>
   )
 }

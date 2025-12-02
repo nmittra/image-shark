@@ -15,8 +15,7 @@ import {
 import { Header } from '../components/Header'
 import { useState } from 'react'
 
-// Change from export function Contact() to:
-const Contact = () => {
+export function Contact() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [subject, setSubject] = useState('')
@@ -38,7 +37,7 @@ const Contact = () => {
 
       toast({
         title: 'Message sent!',
-        description: 'We\'ll get back to you as soon as possible.',
+        description: 'We\'ll get back to you as soon as possible at admin@image-shark.com.',
         status: 'success',
         duration: 5000,
         isClosable: true,
@@ -72,7 +71,7 @@ const Contact = () => {
           </Heading>
 
           <Text color={textColor}>
-            Have a question or feedback? We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.
+            Have a question or feedback? We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible at admin@image-shark.com.
           </Text>
 
           <Box as="form" onSubmit={handleSubmit} width="100%">
@@ -130,9 +129,8 @@ const Contact = () => {
           </Box>
         </VStack>
       </Container>
-
     </Box>
   )
 }
 
-export default Contact
+export default Contact;

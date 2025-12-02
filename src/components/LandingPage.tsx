@@ -55,8 +55,7 @@ function FeatureCard({ icon, title, description, to }: FeatureCardProps) {
   )
 }
 
-// Change from export function LandingPage() to:
-const LandingPage = () => {
+export function LandingPage() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const features = [
     {
@@ -75,7 +74,7 @@ const LandingPage = () => {
       icon: FiEdit,
       title: 'Photo Editor',
       description: 'Spice up your pictures with text, effects, frames or stickers. Simple editing tools for your image needs.',
-      to: '/editor/main',
+      to: '/editor',
     },
     {
       icon: FiDownload,
@@ -87,19 +86,19 @@ const LandingPage = () => {
       icon: FiCrop,
       title: 'Crop IMAGE',
       description: 'Crop your images to the perfect size and aspect ratio. Remove unwanted areas with precision.',
-      to: '/editor/crop',
+      to: '/editor?tab=crop',
     },
     {
       icon: FiEdit,
       title: 'Convert Format',
       description: 'Convert your images between different formats including JPG, PNG, and WebP while maintaining quality.',
-      to: '/editor/convert',
+      to: '/editor?tab=convert',
     },
     {
       icon: FiEdit,
       title: 'Meme Generator',
       description: 'Create funny memes by adding custom text to your images. Perfect for social media sharing.',
-      to: '/editor/meme',
+      to: '/editor?tab=meme',
     }
   ]
 
@@ -108,7 +107,7 @@ const LandingPage = () => {
       <Header />
       <Box
         bgGradient="linear(to-r, green.200, blue.400, purple.500, pink.400)"
-        py={20}
+        py={32}
         px={4}
         textAlign="center"
         position="relative"
@@ -197,4 +196,5 @@ const LandingPage = () => {
     </Box>
   )
 }
-export default LandingPage
+
+export default LandingPage;

@@ -1,0 +1,11 @@
+[build]
+  publish = "project/docs/.vitepress/dist"
+  command = "cd project && npm run docs:build"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

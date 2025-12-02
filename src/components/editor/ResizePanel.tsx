@@ -2,9 +2,11 @@ import {
   Button,
   FormControl,
   FormLabel,
+  HStack,
   Input,
   Switch,
   VStack,
+  useToast,
 } from '@chakra-ui/react'
 import { useState, useCallback, useEffect } from 'react'
 
@@ -17,6 +19,7 @@ interface ResizePanelProps {
 }
 
 export function ResizePanel({ image, setEditedImage }: ResizePanelProps) {
+  const toast = useToast()
   const [width, setWidth] = useState('')
   const [height, setHeight] = useState('')
   const [maintainAspectRatio, setMaintainAspectRatio] = useState(true)
@@ -34,41 +37,93 @@ export function ResizePanel({ image, setEditedImage }: ResizePanelProps) {
 
   useEffect(() => {
     loadImageDimensions()
-  })
+  }, [loadImageDimensions])
 
   const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newWidth = e.target.value
+    const numWidth = Number(newWidth)
+
+    if (numWidth <= 0 || numWidth > 10000) {
+      return
+    }
+
     setWidth(newWidth)
 
     if (maintainAspectRatio && originalDimensions) {
       const ratio = originalDimensions.height / originalDimensions.width
-      setHeight(String(Math.round(Number(newWidth) * ratio)))
+      const newHeight = Math.round(numWidth * ratio)
+      if (newHeight <= 10000) {
+        setHeight(String(newHeight))
+      }
     }
   }
 
   const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newHeight = e.target.value
+    const numHeight = Number(newHeight)
+
+    if (numHeight <= 0 || numHeight > 10000) {
+      return
+    }
+
     setHeight(newHeight)
 
     if (maintainAspectRatio && originalDimensions) {
       const ratio = originalDimensions.width / originalDimensions.height
-      setWidth(String(Math.round(Number(newHeight) * ratio)))
+      const newWidth = Math.round(numHeight * ratio)
+      if (newWidth <= 10000) {
+        setWidth(String(newWidth))
+      }
     }
   }
 
   const handleResize = async () => {
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
+    try {
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      if (!ctx) {
+        toast({
+          title: 'Error resizing image',
+          description: 'Could not initialize image editor',
+          status: 'error',
+          duration: 2000,
+          isClosable: true
+        })
+        return
+      }
 
-    const img = new Image()
-    img.onload = () => {
-      canvas.width = Number(width)
-      canvas.height = Number(height)
-      ctx.drawImage(img, 0, 0, Number(width), Number(height))
-      setEditedImage(canvas.toDataURL(image.file.type))
+      const img = new Image()
+      img.onerror = () => {
+        toast({
+          title: 'Error loading image',
+          description: 'The image could not be loaded. Please try again or use a different image.',
+          status: 'error',
+          duration: 2000,
+          isClosable: true
+        })
+      }
+      img.onload = () => {
+        canvas.width = Number(width)
+        canvas.height = Number(height)
+        ctx.drawImage(img, 0, 0, Number(width), Number(height))
+        setEditedImage(canvas.toDataURL(image.file.type))
+        toast({
+          title: 'Image resized',
+          status: 'success',
+          duration: 2000,
+          isClosable: true
+        })
+      }
+      img.src = image.preview
+    } catch (error) {
+      console.error('Error resizing image:', error)
+      toast({
+        title: 'Error resizing image',
+        status: 'error',
+        duration: 2000,
+        isClosable: true
+      })
     }
-    img.src = image.preview
   }
 
   return (
@@ -80,6 +135,8 @@ export function ResizePanel({ image, setEditedImage }: ResizePanelProps) {
           value={width}
           onChange={handleWidthChange}
           min="1"
+          max="10000"
+          step="1"
         />
       </FormControl>
 
@@ -90,6 +147,8 @@ export function ResizePanel({ image, setEditedImage }: ResizePanelProps) {
           value={height}
           onChange={handleHeightChange}
           min="1"
+          max="10000"
+          step="1"
         />
       </FormControl>
 
@@ -109,5 +168,3 @@ export function ResizePanel({ image, setEditedImage }: ResizePanelProps) {
     </VStack>
   )
 }
-// Remove unused imports and variables
-// If you need to keep them for future use, add // @ts-ignore above them

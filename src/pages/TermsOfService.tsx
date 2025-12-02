@@ -1,7 +1,7 @@
-import { Box, Container, Heading, Text, VStack, useColorModeValue } from '@chakra-ui/react'
+import { Box, Container, Heading, Text, VStack, useColorModeValue, Link as ChakraLink } from '@chakra-ui/react'
 import { Header } from '../components/Header'
+import { Link } from 'react-router-dom'
 
-// Change from export function TermsOfService() to:
 const TermsOfService = () => {
   const bg = useColorModeValue('gray.50', 'gray.800')
   const textColor = useColorModeValue('gray.600', 'gray.300')
@@ -25,7 +25,7 @@ const TermsOfService = () => {
                 1. Acceptance of Terms
               </Heading>
               <Text color={textColor}>
-                By accessing and using Image Editor, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+                By accessing and using Image Shark, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
               </Text>
             </Box>
 
@@ -34,7 +34,7 @@ const TermsOfService = () => {
                 2. Description of Service
               </Heading>
               <Text color={textColor}>
-                Image Editor provides online image editing tools including but not limited to image compression, resizing, watermarking, and format conversion. The service is provided "as is" and "as available" basis.
+                Image Shark provides online image editing tools including but not limited to image compression, resizing, watermarking, and format conversion. The service is provided "as is" and "as available" basis.
               </Text>
             </Box>
 
@@ -64,7 +64,7 @@ const TermsOfService = () => {
                 5. Limitations of Liability
               </Heading>
               <Text color={textColor}>
-                Image Editor shall not be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.
+                Image Shark shall not be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.
               </Text>
             </Box>
 
@@ -82,13 +82,15 @@ const TermsOfService = () => {
                 7. Contact Information
               </Heading>
               <Text color={textColor}>
-                For any questions about these Terms of Service, please contact us at nmittra@gmail.com.
+                For any questions about these Terms of Service, please{' '}
+                <ChakraLink as={Link} to="/contact" color="blue.500" textDecoration="underline">
+                  contact us
+                </ChakraLink>.
               </Text>
             </Box>
           </VStack>
         </VStack>
       </Container>
-
     </Box>
   )
 }
