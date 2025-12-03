@@ -18,20 +18,22 @@ export function WatermarkPage() {
     <Box bg={bg} minH="100vh">
       <Header />
       <Box py={8}>
-      <Container maxW="container.xl">
-        <VStack spacing={8}>
-          {!selectedImage ? (
-            <ImageUploader setSelectedImage={setSelectedImage} />
-          ) : (
-            <ImageEditor
-              selectedImage={selectedImage}
-              setSelectedImage={setSelectedImage}
-              defaultTab="watermark"
-            />
-          )}
-        </VStack>
-      </Container>
+        <Container maxW="container.xl">
+          <VStack spacing={8}>
+            {!selectedImage ? (
+              <ImageUploader setSelectedImage={setSelectedImage} />
+            ) : (
+              <ImageEditor
+                selectedImage={selectedImage}
+                setSelectedImage={setSelectedImage}
+                defaultTab="watermark"
+              />
+            )}
+          </VStack>
+        </Container>
       </Box>
     </Box>
   )
 }
+
+export default WatermarkPage

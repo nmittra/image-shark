@@ -25,16 +25,16 @@ export function EditorPage() {
         <Container maxW="container.lg">
           <ErrorBoundary>
             <VStack spacing={8} align="center" w="full">
-            <Heading as="h1" size="xl" textAlign="center" mb={4}>
-              Photo Editor
-            </Heading>
-            {!selectedImage ? (
-              <ImageUploader setSelectedImage={setSelectedImage} />
-            ) : (
-              <Box w="full">
-                <Outlet context={[selectedImage, setSelectedImage]} />
-              </Box>
-            )}
+              <Heading as="h1" size="xl" textAlign="center" mb={4}>
+                Photo Editor
+              </Heading>
+              {!selectedImage ? (
+                <ImageUploader setSelectedImage={setSelectedImage} />
+              ) : (
+                <Box w="full">
+                  <Outlet context={[selectedImage, setSelectedImage]} />
+                </Box>
+              )}
             </VStack>
           </ErrorBoundary>
         </Container>
@@ -42,3 +42,5 @@ export function EditorPage() {
     </Box>
   )
 }
+
+export default EditorPage

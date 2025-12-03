@@ -20,23 +20,25 @@ export function CompressPage({ selectedImage, setSelectedImage }: CompressPagePr
     <Box bg={bg} minH="100vh">
       <Header />
       <Box py={8}>
-      <Container maxW="container.xl">
-        <VStack spacing={8}>
-          <Heading as="h1" size="xl" textAlign="center" mb={4}>
-            Compress Images
-          </Heading>
-          {!selectedImage ? (
-            <ImageUploader setSelectedImage={setSelectedImage} />
-          ) : (
-            <ImageEditor
-              selectedImage={selectedImage}
-              setSelectedImage={setSelectedImage}
-              defaultTab="compress"
-            />
-          )}
-        </VStack>
-      </Container>
+        <Container maxW="container.xl">
+          <VStack spacing={8}>
+            <Heading as="h1" size="xl" textAlign="center" mb={4}>
+              Compress Images
+            </Heading>
+            {!selectedImage ? (
+              <ImageUploader setSelectedImage={setSelectedImage} />
+            ) : (
+              <ImageEditor
+                selectedImage={selectedImage}
+                setSelectedImage={setSelectedImage}
+                defaultTab="compress"
+              />
+            )}
+          </VStack>
+        </Container>
       </Box>
     </Box>
   )
 }
+
+export default CompressPage

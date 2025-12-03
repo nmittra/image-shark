@@ -18,23 +18,25 @@ export function MemePage() {
     <Box bg={bg} minH="100vh">
       <Header />
       <Box py={12}>
-      <Container maxW="container.lg">
-        <VStack spacing={8} align="center" w="full">
-          <Heading as="h1" size="xl" textAlign="center" mb={4}>
-            Create Your Memes
-          </Heading>
-          {!selectedImage ? (
-            <ImageUploader setSelectedImage={setSelectedImage} />
-          ) : (
-            <ImageEditor
-              selectedImage={selectedImage}
-              setSelectedImage={setSelectedImage}
-              defaultTab="meme"
-            />
-          )}
-        </VStack>
-      </Container>
+        <Container maxW="container.lg">
+          <VStack spacing={8} align="center" w="full">
+            <Heading as="h1" size="xl" textAlign="center" mb={4}>
+              Create Your Memes
+            </Heading>
+            {!selectedImage ? (
+              <ImageUploader setSelectedImage={setSelectedImage} />
+            ) : (
+              <ImageEditor
+                selectedImage={selectedImage}
+                setSelectedImage={setSelectedImage}
+                defaultTab="meme"
+              />
+            )}
+          </VStack>
+        </Container>
       </Box>
     </Box>
   )
 }
+
+export default MemePage
