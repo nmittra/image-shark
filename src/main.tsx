@@ -2,6 +2,7 @@ import { StrictMode, lazy, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ChakraProvider, extendTheme, ColorModeScript } from '@chakra-ui/react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { HelmetProvider } from 'react-helmet-async'
 import './index.css'
 import App from './App'
 import { LoadingIndicator } from './components/LoadingIndicator'
@@ -39,64 +40,64 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <RouteErrorBoundary />,
     children: [
-      { 
-        path: '/', 
+      {
+        path: '/',
         element: <Suspense fallback={<LoadingIndicator />}><LandingPage /></Suspense>
       },
-      { 
-        path: 'compress', 
+      {
+        path: 'compress',
         element: <Suspense fallback={<LoadingIndicator />}><CompressPage /></Suspense>
       },
-      { 
-        path: 'resize', 
+      {
+        path: 'resize',
         element: <Suspense fallback={<LoadingIndicator />}><ResizePage /></Suspense>
       },
-      { 
-        path: 'watermark', 
+      {
+        path: 'watermark',
         element: <Suspense fallback={<LoadingIndicator />}><WatermarkPage /></Suspense>
       },
-      { 
-        path: 'crop', 
+      {
+        path: 'crop',
         element: <Suspense fallback={<LoadingIndicator />}><CropPage /></Suspense>
       },
-      { 
-        path: 'convert', 
+      {
+        path: 'convert',
         element: <Suspense fallback={<LoadingIndicator />}><ConvertPage /></Suspense>
       },
-      { 
-        path: 'meme', 
+      {
+        path: 'meme',
         element: <Suspense fallback={<LoadingIndicator />}><MemePage /></Suspense>
       },
-      { 
-        path: 'editor', 
+      {
+        path: 'editor',
         element: <Suspense fallback={<LoadingIndicator />}><EditorPage /></Suspense>
       },
-      { 
-        path: 'privacy-policy', 
+      {
+        path: 'privacy-policy',
         element: <Suspense fallback={<LoadingIndicator />}><PrivacyPolicy /></Suspense>
       },
-      { 
-        path: 'terms-of-service', 
+      {
+        path: 'terms-of-service',
         element: <Suspense fallback={<LoadingIndicator />}><TermsOfService /></Suspense>
       },
-      { 
-        path: 'cookie-policy', 
+      {
+        path: 'cookie-policy',
         element: <Suspense fallback={<LoadingIndicator />}><CookiePolicy /></Suspense>
       },
-      { 
-        path: 'copyright', 
+      {
+        path: 'copyright',
         element: <Suspense fallback={<LoadingIndicator />}><Copyright /></Suspense>
       },
-      { 
-        path: 'contact', 
+      {
+        path: 'contact',
         element: <Suspense fallback={<LoadingIndicator />}><Contact /></Suspense>
       },
-      { 
-        path: 'sitemap', 
+      {
+        path: 'sitemap',
         element: <Suspense fallback={<LoadingIndicator />}><Sitemap /></Suspense>
       },
-      { 
-        path: 'download', 
+      {
+        path: 'download',
         element: <Suspense fallback={<LoadingIndicator />}><DownloadPage /></Suspense>
       },
       {
@@ -112,13 +113,15 @@ const root = createRoot(container)
 
 root.render(
   <StrictMode>
-    <ChakraProvider theme={theme}>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <ErrorBoundary>
-        <Suspense fallback={<LoadingIndicator />}>
-          <RouterProvider router={router} />
-        </Suspense>
-      </ErrorBoundary>
-    </ChakraProvider>
+    <HelmetProvider>
+      <ChakraProvider theme={theme}>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingIndicator />}>
+            <RouterProvider router={router} />
+          </Suspense>
+        </ErrorBoundary>
+      </ChakraProvider>
+    </HelmetProvider>
   </StrictMode>
 )
