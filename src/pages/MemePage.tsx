@@ -3,6 +3,7 @@ import { ImageUploader } from '../components/ImageUploader'
 import { ImageEditor } from '../components/ImageEditor'
 import { useState } from 'react'
 import { Header } from '../components/Header'
+import { SEO } from '../components/SEO'
 
 interface ImageFile {
   file: File
@@ -16,6 +17,11 @@ export function MemePage() {
 
   return (
     <Box bg={bg} minH="100vh">
+      <SEO
+        title="Meme Generator - Create Memes Online Free"
+        description="Create funny memes by adding custom text to your images. Perfect for social media sharing. Free online meme generator."
+        keywords="meme generator, create memes, meme maker, funny memes, meme creator online"
+      />
       <Header />
       <Box py={12}>
         <Container maxW="container.lg">

@@ -2,6 +2,7 @@ import { Box, Container, Heading, VStack, useColorModeValue } from '@chakra-ui/r
 import { ImageUploader } from '../components/ImageUploader'
 import { ImageEditor } from '../components/ImageEditor'
 import { Header } from '../components/Header'
+import { SEO } from '../components/SEO'
 import { useState } from 'react'
 
 interface ImageFile {
@@ -16,6 +17,11 @@ export function ResizePage() {
 
   return (
     <Box bg={bg} minH="100vh">
+      <SEO
+        title="Resize Images Online Free"
+        description="Resize images by pixels or percentage. Maintain aspect ratio or set custom dimensions. Fast and easy online image resizing tool."
+        keywords="resize images, image resizer, scale images, change image size, resize photos online"
+      />
       <Header />
       <Box py={8}>
         <Container maxW="container.xl">

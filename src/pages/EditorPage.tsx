@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Header } from '../components/Header'
 import { useSearchParams, Outlet } from 'react-router-dom'
 import { ErrorBoundary } from '../components/ErrorBoundary'
+import { SEO } from '../components/SEO'
 
 interface ImageFile {
   file: File
@@ -20,6 +21,11 @@ export function EditorPage() {
 
   return (
     <Box bg={bg} minH="100vh">
+      <SEO
+        title="Photo Editor - Edit Images Online Free"
+        description="Professional online photo editor with filters, effects, frames, and stickers. Edit your images with simple and powerful tools."
+        keywords="photo editor, image editor, edit photos online, photo effects, image filters"
+      />
       <Header />
       <Box py={12}>
         <Container maxW="container.lg">

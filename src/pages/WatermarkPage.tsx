@@ -3,6 +3,7 @@ import { ImageUploader } from '../components/ImageUploader'
 import { ImageEditor } from '../components/ImageEditor'
 import { useState } from 'react'
 import { Header } from '../components/Header'
+import { SEO } from '../components/SEO'
 
 interface ImageFile {
   file: File
@@ -16,6 +17,11 @@ export function WatermarkPage() {
 
   return (
     <Box bg={bg} minH="100vh">
+      <SEO
+        title="Add Watermark to Images Online Free"
+        description="Add text or image watermarks to your photos. Protect your images with custom watermarks. Choose position, transparency, and typography."
+        keywords="watermark images, add watermark, image watermark, protect photos, watermark tool"
+      />
       <Header />
       <Box py={8}>
         <Container maxW="container.xl">

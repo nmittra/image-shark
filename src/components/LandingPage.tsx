@@ -19,6 +19,7 @@ import {
 import { FiImage, FiCrop, FiEdit, FiDownload } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import { Header } from './Header'
+import { SEO } from './SEO'
 
 interface FeatureCardProps {
   icon: typeof FiImage
@@ -104,6 +105,11 @@ export function LandingPage() {
 
   return (
     <Box>
+      <SEO
+        title="Free Online Image Editor & Photo Editing Tools"
+        description="Edit, compress, resize, watermark, crop, and convert images online for free with Image Shark. Professional image editing tools with no registration required."
+        keywords="image editor, photo editor, compress images, resize images, watermark images, crop images, convert images, meme generator, free online image tools"
+      />
       <Header />
       <Box
         bgGradient="linear(to-r, green.200, blue.400, purple.500, pink.400)"

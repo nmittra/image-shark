@@ -2,6 +2,7 @@ import { Box, Container, Heading, VStack, useColorModeValue } from '@chakra-ui/r
 import { ImageUploader } from '../components/ImageUploader'
 import { ImageEditor } from '../components/ImageEditor'
 import { Header } from '../components/Header'
+import { SEO } from '../components/SEO'
 
 interface ImageFile {
   file: File
@@ -18,6 +19,11 @@ export function CompressPage({ selectedImage, setSelectedImage }: CompressPagePr
 
   return (
     <Box bg={bg} minH="100vh">
+      <SEO
+        title="Compress Images Online Free"
+        description="Compress JPG, PNG and GIF images while maintaining quality. Reduce file size for faster loading and save storage space. Free online image compression tool."
+        keywords="compress images, image compression, reduce file size, optimize images, compress jpg, compress png"
+      />
       <Header />
       <Box py={8}>
         <Container maxW="container.xl">

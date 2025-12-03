@@ -2,22 +2,25 @@ import { Box, Container, Heading, VStack, useColorModeValue } from '@chakra-ui/r
 import { ImageUploader } from '../components/ImageUploader'
 import { ImageEditor } from '../components/ImageEditor'
 import { Header } from '../components/Header'
+import { SEO } from '../components/SEO'
+import { useState } from 'react'
 
 interface ImageFile {
   file: File
   preview: string
 }
 
-interface CropPageProps {
-  selectedImage: ImageFile | null
-  setSelectedImage: (image: ImageFile | null) => void
-}
-
-function CropPage({ selectedImage, setSelectedImage }: CropPageProps) {
+export function CropPage() {
+  const [selectedImage, setSelectedImage] = useState<ImageFile | null>(null)
   const bg = useColorModeValue('gray.50', 'gray.800')
 
   return (
     <Box bg={bg} minH="100vh">
+      <SEO
+        title="Crop Images Online Free"
+        description="Crop images to perfect size and aspect ratio. Remove unwanted areas with precision. Free online image cropping tool."
+        keywords="crop images, image cropper, trim images, cut images, crop photos online"
+      />
       <Header />
       <Box py={12}>
         <Container maxW="container.lg">
