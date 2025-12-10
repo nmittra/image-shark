@@ -3,6 +3,7 @@ import { ImageUploader } from '../components/ImageUploader'
 import { ImageEditor } from '../components/ImageEditor'
 import { Header } from '../components/Header'
 import { SEO } from '../components/SEO'
+import { ToolInfoSection } from '../components/ToolInfoSection'
 import { useState } from 'react'
 
 interface ImageFile {
@@ -29,7 +30,10 @@ export function ConvertPage() {
               Convert Image Format
             </Heading>
             {!selectedImage ? (
-              <ImageUploader setSelectedImage={setSelectedImage} />
+              <>
+                <ImageUploader setSelectedImage={setSelectedImage} />
+                <ToolInfoSection toolType="convert" />
+              </>
             ) : (
               <ImageEditor
                 selectedImage={selectedImage}

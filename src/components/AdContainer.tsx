@@ -91,8 +91,8 @@ export const AdContainer = ({ id, type, className }: AdContainerProps) => {
         <ins
           className="adsbygoogle"
           style={{ display: 'block' }}
-          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" // Placeholder
-          data-ad-slot="XXXXXXXXXX" // Placeholder
+          data-ad-client="ca-pub-0291997581976269" // Correct Client ID
+          data-ad-slot="1234567890" // TODO: Replace with your actual Anchor Ad Unit ID
           data-ad-format="auto"
           data-full-width-responsive="true"
         />
@@ -138,8 +138,8 @@ export const AdContainer = ({ id, type, className }: AdContainerProps) => {
           <ins
             className="adsbygoogle"
             style={{ display: 'block', width: '100%' }}
-            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" // Placeholder
-            data-ad-slot="XXXXXXXXXX" // Placeholder
+            data-ad-client="ca-pub-0291997581976269" // Correct Client ID
+            data-ad-slot="9876543210" // TODO: Replace with your actual Ad Unit ID
             data-ad-format="auto"
             data-full-width-responsive="true"
           />

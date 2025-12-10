@@ -1,10 +1,10 @@
-import { 
-  Box, Container, HStack, Link as ChakraLink, useColorModeValue, IconButton, VStack, Collapse, 
-  useDisclosure
+import {
+  Box, Container, HStack, Link as ChakraLink, useColorModeValue, IconButton, VStack, Collapse,
+  useDisclosure, useColorMode
 } from '@chakra-ui/react'
 import { Link, useLocation } from 'react-router-dom'
 import { Logo } from './Logo'
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
+import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons'
 import { useMemo } from 'react'
 
 interface NavItem {
@@ -26,7 +26,7 @@ const NavLink = ({ path, label, isActive, activeColor, hoverBg, isMobile = false
     to={path}
     fontSize="md"
     fontWeight={isActive ? 'bold' : 'normal'}
-    color={isActive ? activeColor : undefined}
+    color={isActive ? activeColor : 'inherit'}
     position="relative"
     _hover={{
       textDecoration: 'none',
@@ -53,6 +53,7 @@ const NavLink = ({ path, label, isActive, activeColor, hoverBg, isMobile = false
 )
 
 export function Header() {
+  const { colorMode, toggleColorMode } = useColorMode()
   const bg = useColorModeValue('white', 'gray.800')
   const borderColor = useColorModeValue('gray.200', 'gray.600')
   const activeColor = useColorModeValue('blue.500', 'blue.300')
@@ -78,18 +79,18 @@ export function Header() {
 
   // Skip to content link for accessibility
   const SkipLink = () => (
-    <ChakraLink 
-      href="#main-content" 
-      position="absolute" 
-      left="-9999px" 
-      top="auto" 
-      width="1px" 
-      height="1px" 
+    <ChakraLink
+      href="#main-content"
+      position="absolute"
+      left="-9999px"
+      top="auto"
+      width="1px"
+      height="1px"
       overflow="hidden"
-      _focus={{ 
-        left: "50%", 
+      _focus={{
+        left: "50%",
         transform: "translateX(-50%)",
-        width: "auto", 
+        width: "auto",
         height: "auto",
         backgroundColor: "blue.100",
         padding: "1rem",
@@ -137,14 +138,25 @@ export function Header() {
             ))}
           </HStack>
 
-          {/* Mobile Navigation Toggle */}
-          <IconButton
-            display={{ base: 'flex', md: 'none' }}
-            onClick={onToggle}
-            icon={isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />}
-            variant="ghost"
-            aria-label="Toggle Navigation"
-          />
+          <HStack spacing={4}>
+            {/* Dark Mode Toggle */}
+            <IconButton
+              onClick={toggleColorMode}
+              icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+              variant="ghost"
+              aria-label="Toggle dark mode"
+              display={{ base: 'none', md: 'flex' }}
+            />
+
+            {/* Mobile Navigation Toggle */}
+            <IconButton
+              display={{ base: 'flex', md: 'none' }}
+              onClick={onToggle}
+              icon={isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />}
+              variant="ghost"
+              aria-label="Toggle Navigation"
+            />
+          </HStack>
         </HStack>
 
         {/* Mobile Navigation Menu */}
@@ -166,6 +178,18 @@ export function Header() {
                 isMobile
               />
             ))}
+            <Box px={4} pt={2}>
+              <IconButton
+                onClick={toggleColorMode}
+                icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+                variant="ghost"
+                aria-label="Toggle dark mode"
+                width="full"
+                justifyContent="flex-start"
+              >
+                {colorMode === 'light' ? 'Dark Mode' : 'Light Mode'}
+              </IconButton>
+            </Box>
           </VStack>
         </Collapse>
       </Container>

@@ -4,6 +4,7 @@ import { ImageEditor } from '../components/ImageEditor'
 import { useState } from 'react'
 import { Header } from '../components/Header'
 import { SEO } from '../components/SEO'
+import { ToolInfoSection } from '../components/ToolInfoSection'
 
 interface ImageFile {
   file: File
@@ -30,7 +31,10 @@ export function WatermarkPage() {
               Watermark Your Images
             </Heading>
             {!selectedImage ? (
-              <ImageUploader setSelectedImage={setSelectedImage} />
+              <>
+                <ImageUploader setSelectedImage={setSelectedImage} />
+                <ToolInfoSection toolType="watermark" />
+              </>
             ) : (
               <ImageEditor
                 selectedImage={selectedImage}

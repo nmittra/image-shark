@@ -16,6 +16,7 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from '@chakra-ui/react'
+import { AdContainer } from './AdContainer'
 import { FiImage, FiCrop, FiEdit, FiDownload } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import { Header } from './Header'
@@ -164,6 +165,7 @@ export function LandingPage() {
       </Box>
 
       <Container maxW="container.xl" py={20}>
+        <AdContainer id="landing-leaderboard" type="leaderboard" />
         <Grid
           templateColumns={{
             base: '1fr',
