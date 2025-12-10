@@ -13,22 +13,17 @@ import {
     AccordionButton,
     AccordionPanel,
     AccordionIcon,
-    List,
-    ListItem,
-    ListIcon,
-    Badge,
-    Flex,
-    Divider
+    Flex
 } from '@chakra-ui/react'
 import { AdContainer } from './AdContainer'
 import {
     FaCheckCircle, FaRocket, FaLock, FaMagic, FaMobileAlt, FaGlobe, FaPrint, FaEnvelope,
     FaPalette, FaCropAlt, FaExpandArrowsAlt, FaCompressArrowsAlt, FaFont,
-    FaQuestionCircle, FaUserTie, FaLaptopCode, FaCamera, FaStepForward, FaStore, FaShareAlt
+    FaQuestionCircle, FaUserTie, FaLaptopCode, FaCamera, FaStore, FaShareAlt
 } from 'react-icons/fa'
 import { IconType } from 'react-icons'
 
-type ToolType = 'compress' | 'resize' | 'crop' | 'convert' | 'watermark' | 'meme' | 'editor'
+type ToolType = 'compress' | 'resize' | 'crop' | 'convert' | 'watermark' | 'meme' | 'editor' | 'passport'
 
 interface ToolInfoSectionProps {
     toolType: ToolType
@@ -276,6 +271,36 @@ const toolContent: Record<ToolType, ToolData> = {
         faqs: [
             { question: "Is this like Photoshop?", answer: "It offers many essential features of professional software but runs entirely in your browser for free." },
             { question: "Does it work on mobile?", answer: "Yes, our editor is fully responsive and touch-friendly for editing on the go." }
+        ]
+    },
+    passport: {
+        title: "Professional Passport Photos for Free",
+        description: "Create biometric passport and ID photos that meet official requirements. No expensive photo booth trips needed.",
+        features: [
+            { title: "Standard Sizes", description: "Preset dimensions for US, UK, EU, and 100+ other countries' ID requirements.", icon: FaGlobe },
+            { title: "Background Cleanup", description: "Easily crop and adjust to ensure you meet the white/neutral background rules.", icon: FaMagic },
+            { title: "Face Centering", description: "Guidelines to help you position your face perfectly according to biometric standards.", icon: FaUserTie },
+            { title: "Print Ready", description: "Download a 4x6 inch sheet with multiple copies ready for cheap printing.", icon: FaPrint }
+        ],
+        benefits: [
+            "Save money on photos",
+            "Unlimited retakes",
+            "Immediate download",
+            "Privacy guaranteed"
+        ],
+        howTo: [
+            { title: "Take Photo", description: "Take a photo against a plain white wall with good lighting." },
+            { title: "Upload", description: "Upload your photo to our secure editor." },
+            { title: "Crop & Download", description: "Use our presets to crop to the correct size and download your printable sheet." }
+        ],
+        userCases: [
+            { role: "Travelers", benefit: "Get your visa and passport photos sorted quickly before your next trip.", icon: FaGlobe },
+            { role: "Students", benefit: "Create student ID photos without paying campus administration fees.", icon: FaUserTie },
+            { role: "Job Seekers", benefit: "Create professional-looking headshots for CVs and LinkedIn.", icon: FaLaptopCode }
+        ],
+        faqs: [
+            { question: "Are these photos accepted?", answer: "Yes, as long as you follow the lighting and posing guidelines, our sizing tools meet official standards." },
+            { question: "How do I print them?", answer: "We generate a standard 4x6 inch image file that you can print at any pharmacy or photo kiosk for pennies." }
         ]
     }
 }

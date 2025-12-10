@@ -17,7 +17,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { AdContainer } from './AdContainer'
-import { FiImage, FiCrop, FiEdit, FiDownload } from 'react-icons/fi'
+import { FiImage, FiCrop, FiEdit, FiDownload, FiUser } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import { Header } from './Header'
 import { SEO } from './SEO'
@@ -88,19 +88,25 @@ export function LandingPage() {
       icon: FiCrop,
       title: 'Crop IMAGE',
       description: 'Crop your images to the perfect size and aspect ratio. Remove unwanted areas with precision.',
-      to: '/editor/crop',
+      to: '/crop',
     },
     {
       icon: FiEdit,
       title: 'Convert Format',
       description: 'Convert your images between different formats including JPG, PNG, and WebP while maintaining quality.',
-      to: '/editor/convert',
+      to: '/convert',
     },
     {
       icon: FiEdit,
       title: 'Meme Generator',
       description: 'Create funny memes by adding custom text to your images. Perfect for social media sharing.',
-      to: '/editor/meme',
+      to: '/meme',
+    },
+    {
+      icon: FiUser,
+      title: 'Passport Photo Maker',
+      description: 'Create professional passport and ID photos. Automatic sizing and formatting for any country.',
+      to: '/passport',
     }
   ]
 

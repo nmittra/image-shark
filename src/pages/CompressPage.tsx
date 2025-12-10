@@ -4,18 +4,15 @@ import { ImageEditor } from '../components/ImageEditor'
 import { Header } from '../components/Header'
 import { SEO } from '../components/SEO'
 import { ToolInfoSection } from '../components/ToolInfoSection'
+import { useState } from 'react'
 
 interface ImageFile {
   file: File
   preview: string
 }
 
-interface CompressPageProps {
-  selectedImage: ImageFile | null
-  setSelectedImage: (image: ImageFile | null) => void
-}
-
-export function CompressPage({ selectedImage, setSelectedImage }: CompressPageProps) {
+export function CompressPage() {
+  const [selectedImage, setSelectedImage] = useState<ImageFile | null>(null)
   const bg = useColorModeValue('gray.50', 'gray.800')
 
   return (

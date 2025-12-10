@@ -26,6 +26,7 @@ const Contact = lazy(() => import('./pages/Contact'))
 const Sitemap = lazy(() => import('./pages/Sitemap'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 const DownloadPage = lazy(() => import('./pages/DownloadPage'))
+const PassportPage = lazy(() => import('./pages/PassportPage'))
 
 const theme = extendTheme({
   config: {
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
       {
         path: 'download',
         element: <Suspense fallback={<LoadingIndicator />}><DownloadPage /></Suspense>
+      },
+      {
+        path: 'passport',
+        element: <Suspense fallback={<LoadingIndicator />}><PassportPage /></Suspense>
       },
       {
         path: '*',

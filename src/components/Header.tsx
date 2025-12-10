@@ -69,6 +69,7 @@ export function Header() {
     { path: '/crop', label: 'Crop' },
     { path: '/convert', label: 'Convert' },
     { path: '/meme', label: 'Meme' },
+    { path: '/passport', label: 'Passport' },
     { path: '/editor', label: 'Editor' }
   ], []);
 

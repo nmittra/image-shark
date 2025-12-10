@@ -1,19 +1,21 @@
-import { Box, Text, VStack, Button, HStack, IconButton, useColorModeValue } from '@chakra-ui/react'
+import { Box, Text, VStack, Button, HStack, useColorModeValue } from '@chakra-ui/react'
 import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { FiUploadCloud, FiSettings, FiPlus } from 'react-icons/fi'
+import { FiUploadCloud } from 'react-icons/fi'
 
 interface ImageUploaderProps {
   setSelectedImage: (image: { file: File; preview: string } | null) => void
 }
 
 export function ImageUploader({ setSelectedImage }: ImageUploaderProps) {
-  const [files, setFiles] = useState<Array<{ name: string; size: number }>>([])
+  const [files, setFiles] = useState<Array<{ name: string; size: number; file: File }>>([])
   const borderColor = useColorModeValue("gray.200", "gray.600")
   const bgColor = useColorModeValue("blue.50", "blue.900")
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    acceptedFiles.forEach(file => {
+    // Auto-select the first file to streamline UX
+    if (acceptedFiles.length > 0) {
+      const file = acceptedFiles[0]
       const reader = new FileReader()
       reader.onload = () => {
         setSelectedImage({
@@ -22,7 +24,11 @@ export function ImageUploader({ setSelectedImage }: ImageUploaderProps) {
         })
       }
       reader.readAsDataURL(file)
-      setFiles(prevFiles => [...prevFiles, { name: file.name, size: file.size }])
+    }
+
+    // Also update local state
+    acceptedFiles.forEach(file => {
+      setFiles(prevFiles => [...prevFiles, { name: file.name, size: file.size, file }])
     })
   }, [setSelectedImage])
 
@@ -47,12 +53,13 @@ export function ImageUploader({ setSelectedImage }: ImageUploaderProps) {
           textAlign="center"
           cursor="pointer"
           _hover={{ borderColor: "blue.500" }}
+          transition="all 0.2s"
         >
           <input {...getInputProps()} />
           <VStack spacing={2}>
             <FiUploadCloud size={40} color="currentColor" />
             <Text fontWeight="medium">
-              {files.length > 0 ? "File added! Start task or add more files" : "Drag and drop your images here, or click to select files"}
+              {files.length > 0 ? "Processing..." : "Drag and drop your images here, or click to select files"}
             </Text>
           </VStack>
         </Box>
@@ -68,46 +75,7 @@ export function ImageUploader({ setSelectedImage }: ImageUploaderProps) {
           </Box>
         )}
 
-        <HStack spacing={4}>
-          <Button
-            leftIcon={<FiPlus />}
-            variant="outline"
-            onClick={() => {
-              const fileInput = document.createElement('input')
-              fileInput.type = 'file'
-              fileInput.accept = 'image/*'
-              fileInput.multiple = true
-              fileInput.onchange = (e) => {
-                const files = (e.target as HTMLInputElement).files
-                if (files) {
-                  onDrop(Array.from(files))
-                }
-              }
-              fileInput.click()
-            }}
-          >
-            Add more files
-          </Button>
-          <Button
-            leftIcon={<FiSettings />}
-            variant="outline"
-          >
-            Settings
-          </Button>
-          <Button
-            colorScheme="blue"
-            onClick={() => {
-              if (files.length > 0) {
-                setSelectedImage({
-                  file: files[0],
-                  preview: URL.createObjectURL(files[0])
-                })
-              }
-            }}
-          >
-            START
-          </Button>
-        </HStack>
+
       </VStack>
     </Box>
   )
